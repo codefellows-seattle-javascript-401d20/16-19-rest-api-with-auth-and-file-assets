@@ -96,6 +96,21 @@ describe('AUTH router', () => {
         });
     });
 
+    test('GET /login with 400',() => {
+      let mockPassword = faker.internet.password();
+      return accountMock.create(mockPassword)
+        .then(() => {
+          return superagent.get(`${apiURL}/login`)
+            .query({
+              password: mockPassword,
+            });
+        })
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
+    });
+
     test('GET /login with 404',() => {
       let mockPassword = faker.internet.password();
       return accountMock.create(mockPassword)

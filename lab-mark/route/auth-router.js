@@ -14,6 +14,10 @@ authRouter.post('/signup', (req, res, next) => {
 });
 
 authRouter.get('/login', (req, res, next) => {
+
+  if(!req.query.username || !req.query.password)
+    throw httpErrors(400, '__REQUEST_ERROR__ need username and password');
+
   let accountCache;
   Account.findOne({username: req.query.username})
     .then(account => {
