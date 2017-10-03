@@ -16,9 +16,9 @@ describe('AUTH router', () => {
   test('POST /signup with 200', () => {
     return superagent.post(`${apiURL}/signup`)
       .send({
-        username: 'slorg',
-        email: 'slorg@example.com',
-        password: 'topsecret',
+        username: 'nancy',
+        email: 'nancy@neat.com',
+        password: 'secretpassword',
       })
       .then(res => {
         expect(res.status).toEqual(200);
@@ -29,12 +29,29 @@ describe('AUTH router', () => {
   test('POST /signup with 400', () => {
     return superagent.post(`${apiURL}/signup`)
       .send({
-        email: 'slorg@example.com',
-        password: 'topsecret',
+        email: 'nancy@neat.com',
+        password: 'secretpassword',
       })
       .then(Promise.reject)
       .catch(res => {
         expect(res.status).toEqual(400);
+      });
+  });
+
+  test.only('409 due to duplicate title', () => {
+    return accountMock.create()
+      .then(mockaccount => {
+        console.log(mockaccount);
+        return superagent.post(`${apiURL}/signup`)
+          .send({
+            username: mockaccount.request.username,
+            email: mockaccount.request.email,
+            password: 'abcd',
+          });
+      })
+      .then(Promise.reject)
+      .catch(res => {
+        expect(res.status).toEqual(409);
       });
   });
 });

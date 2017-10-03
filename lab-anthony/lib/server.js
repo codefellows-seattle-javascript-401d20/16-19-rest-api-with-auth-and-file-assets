@@ -8,11 +8,13 @@ mongoose.Promise = Promise;
 
 const app = express();
 let server = null;
-const production = process.env.NODE_ENV === 'production';
+const isProductionEnv = process.env.NODE_ENV === 'production';
 
 // global middleware
 app.use(cors({origin: process.env.CORS_ORIGIN}));
-app.use(morgan(production ? 'combined' : 'dev'));
+
+let logStyle = isProductionEnv ? 'combined' : 'dev';
+app.use(morgan(logStyle));
 
 // register routes
 app.use(require('../route/auth-router.js'));
