@@ -4,9 +4,6 @@ const faker = require('faker');
 const Account = require('../../model/account.js');
 
 const create = () => {
-  // { account,
-  //   request,
-  //   token, }
   let result = {
     request: {
       username: faker.internet.userName(),
@@ -17,15 +14,15 @@ const create = () => {
 
   return Account.create(result.request)
     .then(account => {
-      result.account = account; // cache the account on result
-      return account.tokenCreate(); //generate the token
+      result.account = account;
+      return account.tokenCreate();
     })
     .then(token => {
-      result.token = token; // cache the token
-      return Account.findById(result.account._id); // req the updated account
+      result.token = token;
+      return Account.findById(result.account._id);
     })
     .then(account => {
-      result.account = account; // overwrite the cached account with the updated account
+      result.account = account;
       return result;
     });
 };

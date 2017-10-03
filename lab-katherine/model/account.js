@@ -14,8 +14,6 @@ const accountSchema  = mongoose.Schema({
   created: {type: Date, default: () => new Date()},
 });
 
-// instance methods
-// used for login
 accountSchema.methods.passwordVerify = function(password){
   return bcrypt.compare(password, this.passwordHash)
     .then(correctPassword => {
@@ -35,18 +33,13 @@ accountSchema.methods.tokenCreate = function(){
 
 const Account = module.exports = mongoose.model('account', accountSchema);
 
-// data is going to contain {username, email, and password}
 Account.create = function(data){
-  // hash password
   let {password} = data;
   delete data.password;
   return bcrypt.hash(password, 8)
     .then(passwordHash => {
       data.passwordHash = passwordHash;
-      // generate a tokenSeed
       data.tokenSeed = crypto.randomBytes(64).toString('hex');
-      // create an Account
-      // save the account
       return new Account(data).save();
     });
 };
