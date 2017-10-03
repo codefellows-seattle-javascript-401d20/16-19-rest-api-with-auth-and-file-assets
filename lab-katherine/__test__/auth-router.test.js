@@ -41,16 +41,14 @@ describe('AUTH router', () => {
   });
 
   test('POST /signup with 409', () => {
-    let duplicateAccount = {
-      username: 'katherineh',
-      email: 'katherineh@gmail.com',
-      password:'pumpkinpieisgreat',
-    };
-    return superagent.post(`${apiURL}/signup`)
-      .send(duplicateAccount)
-      .then(() => {
+    return accountMock.create()
+      .then(account => {
         return superagent.post(`${apiURL}/signup`)
-          .send(duplicateAccount);
+          .send({
+            username: account.username,
+            email: account.title,
+            password: account.password,
+          });
       })
       .then(Promise.reject)
       .catch(res => {
