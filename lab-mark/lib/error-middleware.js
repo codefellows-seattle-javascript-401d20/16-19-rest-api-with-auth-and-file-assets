@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (err, req, res, next) => {
-  console.error(err);
+  console.error(err.message);
 
   if(err.status)
     return res.sendStatus(err.status);

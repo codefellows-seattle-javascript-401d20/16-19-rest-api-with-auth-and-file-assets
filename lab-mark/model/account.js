@@ -26,7 +26,7 @@ accountSchema.methods.passwordVerify = function(password) {
 
 accountSchema.methods.tokenCreate = function() {
   this.tokenSeed = crypto.randomBytes(64).toString('hex');
-  this.save()
+  return this.save()
     .then(account => {
       return jwt.sign({tokenSeed: account.tokenSeed}, process.env.CLOUD_SECRET);
     });

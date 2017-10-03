@@ -7,14 +7,22 @@ const httpErrors = require('http-errors');
 const authRouter = module.exports = new Router();
 
 authRouter.post('/signup', (req, res, next) => {
-  if(!req.body.username || !req.body.email || !req.body.password)
-    return next(httpErrors(400, '__REQUEST_ERROR__ username, email, and password are required'));
-
   Account.create(req.body)
-    .then(user => user.tokenCreate())
+    .then(account => account.tokenCreate())
     .then(token => res.json({token}))
     .catch(next);
 });
 
-authRouter.get('/login', () => {
+authRouter.get('/login', (req, res, next) => {
+  let accountCache;
+  Account.findOne({username: req.query.username})
+    .then(account => {
+      if(!account)
+        throw httpErrors(404, '__REQUEST_ERROR__ account does not exist');
+      accountCache = account;
+      return account.passwordVerify(req.query.password);
+    })
+    .then(() => accountCache.tokenCreate())
+    .then(token => res.json({token}))
+    .catch(next);
 });
