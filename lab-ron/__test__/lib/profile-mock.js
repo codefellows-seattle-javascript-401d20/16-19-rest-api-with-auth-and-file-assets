@@ -21,5 +21,7 @@ let create = () => {
         bio: { type: String },
       }).save();
     })
+
+    
     .then();
 };
