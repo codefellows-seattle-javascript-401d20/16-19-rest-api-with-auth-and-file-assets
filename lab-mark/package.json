@@ -20,10 +20,17 @@
   "devDependencies": {
     "faker": "^4.1.0",
     "jest": "^21.2.1",
+    "nodemon": "^1.12.1",
     "superagent": "^3.6.2"
   },
   "scripts": {
-    "test": "jest -i"
+    "lint": "eslint .",
+    "start": "node index.js",
+    "test": "jest -i --coverage",
+    "dbon": "mkdir -p ./db && mongod --dbpath ./db",
+    "dboff": "killall mongod",
+    "watch": "nodemon index.js",
+    "test-watch": "jest -i --coverage --watch"
   },
   "keywords": [],
   "author": "",

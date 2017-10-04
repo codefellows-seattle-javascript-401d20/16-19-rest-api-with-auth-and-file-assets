@@ -6,9 +6,9 @@ const faker = require('faker');
 
 let create = () => {
   let result = {};
-  accountMock.create(faker.internet.password())
+  return accountMock.create(faker.internet.password())
     .then(tempAccount => {
-      result.tempAccount = tempAccount;
+      result = tempAccount;
       return new Profile({
         username: tempAccount.request.username,
         email: tempAccount.request.email,

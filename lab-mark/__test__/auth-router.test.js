@@ -63,6 +63,7 @@ describe('AUTH router', () => {
         });
     });
   });
+
   describe('/login', () => {
     test('GET /login with 200',() => {
       let mockPassword = faker.internet.password();
@@ -74,6 +75,19 @@ describe('AUTH router', () => {
         .then(res => {
           expect(res.status).toEqual(200);
           expect(res.body.token).toBeTruthy();
+        });
+    });
+
+    test('GET /login with 400 basic auth required',() => {
+      let mockPassword = faker.internet.password();
+      return accountMock.create(mockPassword)
+        .then(mock => {
+          return superagent.get(`${apiURL}/login`)
+            .set('Authorization', `Bearer ${mock.token}`);
+        })
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(400);
         });
     });
 

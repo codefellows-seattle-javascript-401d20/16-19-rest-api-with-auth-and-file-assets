@@ -14,13 +14,12 @@ module.exports = (err, req, res, next) => {
   if(message.includes('validation failed'))
     return res.sendStatus(400);
 
-  // if duplacte key respond with 409
+  // if duplicate key respond with 409
   if(message.includes('duplicate key'))
     return res.sendStatus(409);
 
-
   if(message.includes('unauthorized'))
-    return res.sendStatus(401) ;
+    return res.sendStatus(401);
 
   res.sendStatus(500);
 
