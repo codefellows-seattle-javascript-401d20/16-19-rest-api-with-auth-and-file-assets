@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
 
   const token = req.headers.authorization.split('Bearer ')[1];
   if(!token)
-    return next(httpErrors(401, '__REQUEST_ERROR__ Bearer auth requred'));
+    return next(httpErrors(401, '__REQUEST_ERROR__ unauthorized'));
 
   promisify(jwt.verify)(token, process.env.CLOUD_SECRET)
     .catch(err => Promise.reject(httpErrors(401, err)))
@@ -27,8 +27,6 @@ module.exports = (req, res, next) => {
       return Account.findOne({tokenSeed: decrypted.tokenSeed});
     })
     .then(account => {
-      if(!account)
-        throw httpErrors(401, '__REQUEST_ERROR__ account not found');
       req.account = account;
       next();
     })

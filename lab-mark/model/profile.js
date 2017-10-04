@@ -12,6 +12,7 @@ const profileSchema = mongoose.Schema({
   bio: {type: String},
   birthday: {type: String},
   account: {type: mongoose.Schema.Types.ObjectId, required: true, unique: true},
+  blogs: [{type: mongoose.Schema.Types.ObjectId, ref: 'blog'}],
 });
 
 module.exports = mongoose.model('profile', profileSchema);
