@@ -48,18 +48,19 @@ describe('/profiles', () => {
         });
     });
 
-    // test('401 should not return a profile', () => {
-    //   return superagent.post(`${apiURL}/profiles`)
-    //     .send({
-    //       firstName: 'Katherine',
-    //       lastName: 'Hanson',
-    //       favoriteQuote: 'Something something something something something something something something something something',
-    //     })
-    //     .then(Promise.reject)
-    //     .catch(res => {
-    //       expect(res.status).toEqual(401);
-    //     });
-    // });
+    test('401 should not return a profile', () => {
+      return superagent.post(`${apiURL}/profiles`)
+        .set('Authorization', `Bearer bad token`)
+        .send({
+          firstName: 'Katherine',
+          lastName: 'Hanson',
+          favoriteQuote: 'Something something something something something something something something something something',
+        })
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
   });
 
   describe('GET /profiles/:id', () => {

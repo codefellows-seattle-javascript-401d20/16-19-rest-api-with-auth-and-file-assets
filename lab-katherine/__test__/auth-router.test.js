@@ -80,13 +80,23 @@ describe('AUTH router', () => {
         });
     });
 
-    test('GET /login 401', () => {
+    test('GET /login 401 due to bad password', () => {
       accountMock.create()
         .then(mock => {
           return superagent.get(`${apiURL}/login`)
-            .auth(mock.request.username, 'bjhbnkjnm');
+            .auth(mock.request.username, 'nope');
         })
-        .then(res => {
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(200);
+        });
+    });
+
+    test('GET /login 401 due to bad account', () => {
+      return superagent.get(`${apiURL}/login`)
+        .auth('turn back ye who approach', 'nope')
+        .then(Promise.reject)
+        .catch(res => {
           expect(res.status).toEqual(401);
         });
     });
