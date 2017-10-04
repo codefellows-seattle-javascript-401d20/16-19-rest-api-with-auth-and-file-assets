@@ -44,5 +44,5 @@ describe('AUTH router', () => {
 
   test('', () => {
   })
-  
+
 })
