@@ -55,7 +55,7 @@ describe('/blogs', () => {
     });
   });
 
-  describe('GET /blogs/:id', () => {
+  describe('GET /blogs', () => {
     test('should return 200 and a blog', () => {
       let tempMock;
       return blogMock.create()
@@ -73,6 +73,20 @@ describe('/blogs', () => {
           expect(res.body.published).toEqual(tempMock.blog.published.toJSON());
           expect(res.body.profile._id).toEqual(tempMock.profile._id.toString());
           expect(res.body.profile.username).toEqual(tempMock.profile.username);
+        });
+    });
+
+    test('should return 200 and all blogs for account', () => {
+      let tempTitles = [];
+      return blogMock.createMany(10)
+        .then(mock  => {
+          tempTitles = mock.blogs.map(blog => blog.title).sort();
+          return superagent.get(`${apiURL}/blogs`)
+            .set('Authorization', `Bearer ${mock.token}`);
+        })
+        .then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body.map(blog => blog.title).sort()).toEqual(tempTitles);
         });
     });
   });

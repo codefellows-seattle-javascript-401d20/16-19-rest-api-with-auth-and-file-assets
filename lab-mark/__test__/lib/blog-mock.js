@@ -30,7 +30,9 @@ let createMany = (num) => {
       return Promise.all(new Array(num).fill(0)
         .map(() => {
           return new Blog({
-            content: faker.lorem.words(7),
+            title: faker.commerce.productName(),
+            content: faker.lorem.paragraph(),
+            rate: faker.random.number(),
             profile: data.profile._id,
           }).save();
         }));
