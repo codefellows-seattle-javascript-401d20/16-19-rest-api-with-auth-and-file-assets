@@ -11,6 +11,7 @@
 * [mongoosse api docs](http://mongoosejs.com/docs/api.html)
 * [aws sdk](https://github.com/aws/aws-sdk-js)
 * [aws sdk s3 docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html)
+* [aws sdk mock docs](https://github.com/dwyl/aws-sdk-mock)
 
 ## Feature Tasks  
 Create a third model that represents a file asset. The file should be stored on AWS S3, and metadata about the file should be stored in your mongo database.  
