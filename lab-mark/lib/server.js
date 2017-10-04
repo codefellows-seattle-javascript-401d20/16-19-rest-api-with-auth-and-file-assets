@@ -6,6 +6,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const jsonParser = require('body-parser').json();
 const authRouter = require('../route/auth-router.js');
+const profileRouter = require('../route/profile-router.js');
 
 
 // Enable promises
@@ -22,6 +23,7 @@ app.use(morgan(production ? 'combined' : 'dev'));
 
 // Register routes
 app.use(authRouter);
+app.use(profileRouter);
 
 // Register 404 route
 app.all('*', (req, res) => res.sendStatus(404));

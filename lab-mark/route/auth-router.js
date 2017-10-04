@@ -2,7 +2,7 @@
 
 const {Router} = require('express');
 const Account = require('../model/account.js');
-const httpErrors = require('http-errors');
+const basicAuth = require('../lib/basic-auth-middleware.js');
 
 const authRouter = module.exports = new Router();
 
@@ -13,20 +13,8 @@ authRouter.post('/signup', (req, res, next) => {
     .catch(next);
 });
 
-authRouter.get('/login', (req, res, next) => {
-
-  if(!req.query.username || !req.query.password)
-    throw httpErrors(400, '__REQUEST_ERROR__ need username and password');
-
-  let accountCache;
-  Account.findOne({username: req.query.username})
-    .then(account => {
-      if(!account)
-        throw httpErrors(404, '__REQUEST_ERROR__ account does not exist');
-      accountCache = account;
-      return account.passwordVerify(req.query.password);
-    })
-    .then(() => accountCache.tokenCreate())
+authRouter.get('/login', basicAuth, (req, res, next) => {
+  req.account.tokenCreate()
     .then(token => res.json({token}))
     .catch(next);
 });
