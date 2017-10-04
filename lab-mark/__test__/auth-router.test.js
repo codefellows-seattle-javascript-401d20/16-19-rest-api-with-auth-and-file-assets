@@ -69,10 +69,7 @@ describe('AUTH router', () => {
       return accountMock.create(mockPassword)
         .then(mock => {
           return superagent.get(`${apiURL}/login`)
-            .query({
-              username: mock.request.username,
-              password: mockPassword,
-            });
+            .auth(mock.request.username, mockPassword);
         })
         .then(res => {
           expect(res.status).toEqual(200);
@@ -85,10 +82,7 @@ describe('AUTH router', () => {
       return accountMock.create(mockPassword)
         .then(mock => {
           return superagent.get(`${apiURL}/login`)
-            .query({
-              username: mock.request.username,
-              password: 'lulwat+coolbeans=wrongpassword',
-            });
+            .auth(mock.request.username, 'lulwat');
         })
         .then(Promise.reject)
         .catch(res => {
@@ -100,10 +94,7 @@ describe('AUTH router', () => {
       let mockPassword = faker.internet.password();
       return accountMock.create(mockPassword)
         .then(() => {
-          return superagent.get(`${apiURL}/login`)
-            .query({
-              password: mockPassword,
-            });
+          return superagent.get(`${apiURL}/login`);
         })
         .then(Promise.reject)
         .catch(res => {
@@ -116,10 +107,7 @@ describe('AUTH router', () => {
       return accountMock.create(mockPassword)
         .then(() => {
           return superagent.get(`${apiURL}/login`)
-            .query({
-              username: 'ThisUserDoesNotExist',
-              password: mockPassword,
-            });
+            .auth('ThisUserDoesNotExist', mockPassword);
         })
         .then(Promise.reject)
         .catch(res => {
