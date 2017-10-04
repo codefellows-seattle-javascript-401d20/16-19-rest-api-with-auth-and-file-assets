@@ -78,7 +78,7 @@ describe('/profiles', () => {
     test('GET /login 404', () => {
       accountMock.create()
         .then(mock => {
-          return superagent.get(`${apiURL}/login`)
+          return superagent.get(`${apiURL}/login/gskjgnsjgn`)
             .auth(mock.request.username, mock.request.password);
         })
         .then(Promise.reject)
