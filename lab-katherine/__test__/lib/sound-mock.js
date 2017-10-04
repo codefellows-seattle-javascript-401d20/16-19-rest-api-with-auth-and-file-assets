@@ -2,21 +2,21 @@
 
 const faker = require('faker');
 const accountMock = require('./account-mock.js');
-const Image = require('../../model/image.js');
+const Sound = require('../../model/sound.js');
 
 const create = () => {
   let result = {};
   return accountMock.create()
     .then( account => {
       result.tempAccount = account;
-      return new Image({
+      return new Sound({
         account: account._id,
         title: faker.lorem.words(10),
-        url: faker.image.image(),
+        url: faker.sound.sound(),
       }).save();
     })
-    .then(image => {
-      result.image = image;
+    .then(sound => {
+      result.sound = sound;
       return result;
     });
 };
@@ -24,7 +24,7 @@ const create = () => {
 const remove = () => {
   return Promise.all([
     accountMock.remove,
-    Image.remove({}),
+    Sound.remove({}),
   ]);
 };
 
