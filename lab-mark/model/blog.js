@@ -18,7 +18,6 @@ blogSchema.pre('save', function(done){
       if(!profile)
         throw httpErrors(404, 'profile not found');
       profile.blogs.push(this._id);
-      console.log(profile);
       return profile.save();
     })
     .then(() => done())
@@ -30,7 +29,6 @@ blogSchema.post('remove', function(doc, done) {
     .then(profile => {
       if(!profile)
         throw httpErrors(404, 'profile not found');
-      console.log('PROFILE----->', profile);
       profile.blogs = profile.blogs.filter(blog => {
         return blog.toString() !== doc._id.toString();
       });
