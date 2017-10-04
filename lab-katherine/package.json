@@ -4,9 +4,10 @@
   "description": "![cf](https://i.imgur.com/7v5ASc8.png) Lab 13: Express and Mongo two resoruce REST API ======",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint",
+    "lint": "eslint .",
     "start": "node index.js",
     "test": "jest -i --coverage",
+    "test-watch": "jest -i --coverage --watch",
     "dbon": "mkdir -p ./db && mongod --dbpath ./db",
     "dboff": "killall mongod"
   },

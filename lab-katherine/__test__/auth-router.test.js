@@ -42,17 +42,53 @@ describe('AUTH router', () => {
 
   test('POST /signup with 409', () => {
     return accountMock.create()
-      .then(account => {
-        return superagent.post(`${apiURL}/signup`)
-          .send({
-            username: account.username,
-            email: account.title,
-            password: account.password,
-          });
+      .then(mock => {
+        return superagent.post(`${apiURL}/signup`).send({
+          username: mock.request.username,
+          email: mock.request.email,
+          password: mock.request.password,
+        });
       })
       .then(Promise.reject)
       .catch(res => {
         expect(res.status).toEqual(409);
       });
+  });
+
+  describe('GET /login', () => {
+    test('GET /login 200', () => {
+      accountMock.create()
+        .then(mock => {
+          return superagent.get(`${apiURL}/login`)
+            .auth(mock.request.username, mock.request.password);
+        })
+        .then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body.token).toBeTruthy();
+        });
+    });
+
+    test('GET /login 400', () => {
+      accountMock.create()
+        .then(mock => {
+          return superagent.get(`${apiURL}/login`)
+            .auth(mock.username, mock.password);
+        })
+        .then(res => {
+          expect(res.status).toEqual('400');
+          expect(res.body.token).toBeTruthy();
+        });
+    });
+
+    test('GET /login 401', () => {
+      accountMock.create()
+        .then(mock => {
+          return superagent.get(`${apiURL}/login`)
+            .auth(mock.request.username, 'bjhbnkjnm');
+        })
+        .then(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
   });
 });
