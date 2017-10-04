@@ -41,7 +41,7 @@ Create a model with at least 4 properties that represents some type of file asse
 ## Tests
 * Write 200, 400, and 401 tests for `POST /<resource-name>`
 * Write 200, 404, and 401 tests for `GET /<resource-name>/:id`
-* Write 200, 404, and 401 tests for `GET /<resource-name>/:id`
+* Write 204, 404, and 401 tests for `DELETE /<resource-name>/:id`
 
 ## Documentation
 In the README.md write documention for starting your server and makeing requests to each endpoint it provides. The documentaion should describe how the server would respond to valid and invalid requests.
