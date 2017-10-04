@@ -11,19 +11,20 @@ const create = () => {
       password: faker.lorem.words(10),
     },
   }
+
   return Account.create(result.request)
   .then(account => {
     result.account = account;
-    return account.tokenCreate()
+    return account.tokenCreate();
   })
   .then(token => {
     result.token = token;
-    return Account.findById(result.account._id)
+    return Account.findById(result.account._id);
   })
   .then(account => {
     result.account = account;
-    return result
-  })
+    return result;
+  });
 }
 
 const remove = () => Account.remove({});
