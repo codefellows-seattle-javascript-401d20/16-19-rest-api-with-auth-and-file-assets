@@ -17,14 +17,14 @@ imageRouter.post('/images', bearerAuth, upload.any(), (req, res, next) => {
   if(!req.body.title || req.files.length > 1 || req.files[0].fieldname !== 'image') {
     return Promise.all(req.files.map(file => fs.remove(file.path)))
       .then(() => {
-        throw httpErrors(400, '__REQUEST_ERROR__ title or image was not provided');
+        throw httpErrors(400, '__REQUEST_ERROR__ bad request: title required, and 1 file sent only');
       })
       .catch(next);
   }
 
   let file = req.files[0];
-
   let key = `${file.filename}.${file.originalname}`;
+  
   return s3.upload(file.path, key)
     .then(url => {
       return new Image({
@@ -39,27 +39,14 @@ imageRouter.post('/images', bearerAuth, upload.any(), (req, res, next) => {
 });
 
 imageRouter.get('/images/:id', bearerAuth, (req, res, next) => {
-
   Image.findById(req.params.id)
-    .then(image => {
-      if(!image)
-        throw httpErrors(404, 'no image exists with that ID');
-      return s3.get(image.url)
-        .then(image => {
-          if(!image)
-            throw httpErrors(404, 'image not found');
-          res.json(image);
-        });
-    })
+    .then(image => res.json(image))
     .catch(next);
 });
 
 imageRouter.delete('/images/:id', bearerAuth, (req, res, next) => {
-
   Image.findById(req.params.id)
     .then(image => {
-      if(!image)
-        throw httpErrors(404, 'no image exists with that ID');
       return s3.remove(image.url)
         .then(() => res.sendStatus(204));
     })
