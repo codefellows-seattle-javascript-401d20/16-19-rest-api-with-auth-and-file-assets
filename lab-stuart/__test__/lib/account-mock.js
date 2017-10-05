@@ -11,7 +11,6 @@ const create = () => {
       password: faker.lorem.words(10),
     },
   }
-
   return Account.create(result.request)
   .then(account => {
     result.account = account;

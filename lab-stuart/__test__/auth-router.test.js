@@ -16,43 +16,55 @@ describe('AUTH router', () => {
 
   describe('POST /signup', () => {
     test('POST /signup with 200', () => {
+      let tempAccount = {
+        username: 'username1234',
+        email: 'username1234@gmail.com',
+        password:'password1234',
+      };
       return superagent.post(`${apiURL}/signup`)
-      .send({
-        username: 'slorg', 
-        email: 'slorg@example.com', 
-        password: 'topsecret', 
-      })
-      .then(res => {
-        expect(res.status).toEqual(200);
-        expect(res.body.token).toBeTruthy();
-      });
+        .send(tempAccount)
+        .then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body.token).toBeTruthy();
+        });
     });
 
     test('POST /signup with 400', () => {
+      let tempAccount = {
+        email: 'username1234@gmail.com',
+        password: 'password1234',
+      };
       return superagent.post(`${apiURL}/signup`)
-      .send({
-        email: 'slorg@example.com', 
-        password: 'topsecret', 
-      })
-      .then(Promise.reject)
-      .catch(res => {
-        expect(res.status).toEqual(400);
-      });
+        .send(tempAccount)
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
     });
   });
 
   describe('GET /login', () => {
     test.only('GET /login 200', () => {
       return accountMock.create()
-      .then(mock => {
-        console.log('mock: ', mock)
-        return superagent.get(`${apiURL}/login`)
-        .auth(mock.request.username, mock.request.password);
-      })
-      .then(res => {
-        expect(res.status).toEqual(200);
-        expect(res.body.token).toBeTruthy();
-      });
+        .then(mock => {
+          return superagent.get(`${apiURL}/login`)
+          .auth(mock.request.username, mock.request.password);
+        })
+        .then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body.token).toBeTruthy();
+        });
+    });
+
+    test('GET /login 400', () => {
+      return accountMock.create()
+        .then(mock => {
+          return superagent.get(`${apiURL}/login`);
+        })
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
     });
   });
 });
