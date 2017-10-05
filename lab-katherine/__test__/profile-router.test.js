@@ -63,49 +63,53 @@ describe('/profiles', () => {
   });
 
   describe('GET /profiles/:id', () => {
-    test('GET /profiles 200', () => {
-      // let tempProfile;
-      // return profileMock.create()
-      //   .then(mock => {
-      //     tempProfile = mock;
-      //     return superagent.get(`${apiURL}/profiles/${mock.profile._id}`)
-      //       // .set('Authorization', `Bearer ${tempAccount.token}`)
-      //       // .auth(mock.request.username, mock.request.password);
-      //   })
-      // // let tempMock;
-      // // return profileMock.create()
-      // //   .then(mock => {
-      // //     tempMock = mock;
-      // //     return superagent.get(`${apiURL}/profiles/${mock.profile._id}`)
-      // //   })
-      //   .then(res => {
-      //     console.log(res.body);
-      //     expect(res.status).toEqual(200);
-      //   });
-    });
-
-    test('GET /profiles 404', () => {
-      return accountMock.create()
+    test('GET /profiles/:id 200', () => {
+      let tempMock;
+      return profileMock.create()
         .then(mock => {
-          return superagent.get(`${apiURL}/profiles/gskjgnsjgn`)
-            .auth(mock.request.username, mock.request.password);
-        })
-        .then(Promise.reject)
-        .catch(res => {
-          expect(res.status).toEqual(404);
+          tempMock = mock;
+          return superagent.get(`${apiURL}/profiles/${mock.profile._id}`)
+            .set('Authorization', `Bearer ${mock.tempAccount.token}`)
+            .then(res => {
+              expect(res.status).toEqual(200);
+              expect(res.body.firstName).toEqual(tempMock.profile.firstName);
+              expect(res.body.lastName).toEqual(tempMock.profile.lastName);
+              expect(res.body.favoriteBook).toEqual(tempMock.profile.favoriteBook);
+              expect(res.body.favoriteMovie).toEqual(tempMock.profile.favoriteMovie);
+              expect(res.body.favoriteHobby).toEqual(tempMock.profile.favoriteHobby);
+              expect(res.body.favoriteQuote).toEqual(tempMock.profile.favoriteQuote);
+              expect(res.body.avatar).toEqual(tempMock.profile.avatar);
+              expect(res.body.location).toEqual(tempMock.profile.location);
+              expect(res.body._id).toEqual(tempMock.profile._id.toString());
+              expect(res.body.account).toEqual(tempMock.tempAccount.account._id.toString());
+              expect(res.body.username).toEqual(tempMock.tempAccount.account.username);
+              expect(res.body.email).toEqual(tempMock.tempAccount.account.email);
+            });
         });
     });
 
-    test('GET /profiles 400', () => {
-      // return accountMock.create()
-      //   .then(mock => {
-      //     return superagent.get(`${apiURL}/profiles/${mock.account._id}`)
-      //       .auth(mock.request.username, mock.request.password);
-      //   })
-      //   .then(Promise.reject)
-      //   .catch(res => {
-      //     expect(res.status).toEqual(400);
-      //   });
+    test('GET /profiles 404', () => {
+      return profileMock.create()
+        .then(mock => {
+          return superagent.get(`${apiURL}/profiles/nope`)
+            .set('Authorization', `Bearer ${mock.tempAccount.token}`)
+            .then(Promise.reject)
+            .catch(res => {
+              expect(res.status).toEqual(404);
+            });
+        });
+    });
+
+    test('GET /profiles 401', () => {
+      return profileMock.create()
+        .then(mock => {
+          return superagent.get(`${apiURL}/profiles/${mock.profile._id}`)
+            .set('Authorization', `Bearer ${mock.tempAccount}`)
+            .then(Promise.reject)
+            .catch(res => {
+              expect(res.status).toEqual(401);
+            });
+        });
     });
   });
 });
