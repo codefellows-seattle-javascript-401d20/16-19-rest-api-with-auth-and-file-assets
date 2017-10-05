@@ -33,4 +33,13 @@ module.exports = new Router()
   .catch(next);
 
   res.sendStatus(418);
+})
+.get('/images/:id', bearerAuth, (req, res, next) => {
+  Image.findById(req.params.id)
+  .then(image => {
+    if(!image)
+      throw httpErrors(404, '::REQUEST_ERROR:: image not found');
+    res.json(image);
+  })
+  .catch(next);
 });

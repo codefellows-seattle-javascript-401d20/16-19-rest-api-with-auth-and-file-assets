@@ -15,7 +15,7 @@ describe('/sandwiches', () => {
   afterEach(sandwichMock.remove);
 
   describe('POST /sandwiches', () => {
-    test('200 should return a sandwich', () => {
+    test('POST /sandwiches 200 should return a sandwich', () => {
       let tempAccount;
       return accountMock.create()
       .then(mock => {
@@ -38,6 +38,22 @@ describe('/sandwiches', () => {
         expect(res.body.cheese).toEqual('Cheddar');
         expect(res.body.spread).toEqual(['Mayo','Mustard']);
         expect(res.body.veggies).toEqual(['Lettuce', 'Onions']);
+      });
+    });
+
+    test('POST /sandwiches 401 due to bad token', () => {
+      return superagent.post(`${apiURL}/sandwiches`)
+      .set('Authorization', `Bearer badtoken`)
+      .send({
+        title: 'Badass Sammy',
+        bread: 'White',
+        cheese: 'Cheddar',
+        spread: ['Mayo', 'Mustard'],
+        veggies: ['Lettuce', 'Onions'],
+      })
+      .then(Promise.reject)
+      .catch(res => {
+        expect(res.status).toEqual(401);
       });
     });
   });

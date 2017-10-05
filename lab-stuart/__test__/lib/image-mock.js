@@ -7,10 +7,10 @@ const Image = require('../../model/image.js');
 const create = () => {
   let result = {};
   return accountMock.create()
-  .then(account => {
-    result.tempAccount = account;
+  .then(mock => {
+    result.tempAccount = mock;
     return new Image({
-      account: account._id,
+      account: mock.account._id,
       title: faker.lorem.words(10),
       url: faker.image.image(),
     }).save();

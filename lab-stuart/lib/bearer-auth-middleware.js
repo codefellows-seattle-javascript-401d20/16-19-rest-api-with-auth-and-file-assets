@@ -17,12 +17,9 @@ const promiseify = (fn) => (...args) => {
 module.exports = (req, res, next) => {
   if(!req.headers.authorization)
     return next(httpErrors(400, '::REQUEST_ERROR:: authorization header required'));
-  
-  const token = req.headers.authorization.split('Bearer ')[1]
-  
+  const token = req.headers.authorization.split('Bearer ')[1];
   if(!token)
     return next(httpErrors(400, '::REQUEST_ERROR:: Basic auth required'));
-
   promiseify(jwt.verify)(token, process.env.LABSTUART_SECRET)
   .catch(err => Promise.reject(httpErrors(401, err)))
   .then((decrypted) => {

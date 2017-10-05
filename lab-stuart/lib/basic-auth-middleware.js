@@ -17,7 +17,6 @@ module.exports = (req, res, next) => {
   .then(account => {
     if(!account)
       throw httpErrors(401, '::REQUEST_ERROR:: account not found');
-    console.log(password);
     return account.passwordVerify(password);
   })
   .then(account => {

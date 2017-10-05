@@ -32,4 +32,21 @@ describe('/images', () => {
       });
     });
   });
+
+  test('GET /images/:id 200', () => {
+    let tempMock;
+    return imageMock.create()
+    .then(mock => {
+      tempMock = mock;
+      return superagent.get(`${apiURL}/images/${mock.image._id}`)
+      .set('Authorization', `Bearer ${mock.tempAccount.token}`)
+      .then(res => {
+        expect(res.status).toEqual(200);
+        expect(res.body.url).toEqual(tempMock.image.url);
+        expect(res.body.title).toEqual(tempMock.image.title);
+        expect(res.body._id).toEqual(tempMock.image._id.toString());
+        expect(res.body.account).toEqual(tempMock.tempAccount.account._id.toString());
+      });
+    });
+  });
 });
