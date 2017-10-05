@@ -62,9 +62,83 @@ describe('/sounds', () => {
     });
   });
 
-  describe('GET /sounds', () => {
-    test('GET /sounds  200', () => {
+  describe('GET /sounds/:id', () => {
+    test('GET /sounds/:id 200', () => {
+      let tempMock;
+      return soundMock.create()
+        .then(mock => {
+          tempMock = mock;
+          return superagent.get(`${apiURL}/sounds/${mock.sound._id}`)
+            .set('Authorization', `Bearer ${mock.tempAccount.token}`)
+            .then(res => {
+              expect(res.status).toEqual(200);
+              expect(res.body.url).toEqual(tempMock.sound.url);
+              expect(res.body.title).toEqual(tempMock.sound.title);
+              expect(res.body._id).toEqual(tempMock.sound._id.toString());
+              expect(res.body.account).toEqual(tempMock.tempAccount.account._id.toString());
+            });
+        });
+    });
 
+    test('GET /sounds/:id 401', () => {
+      return soundMock.create()
+        .then(mock => {
+          return superagent.get(`${apiURL}/sounds/${mock.sound._id}`)
+            .set('Authorization', `Bearer ${mock.tempAccount}`)
+            .then(Promise.reject)
+            .catch(res => {
+              expect(res.status).toEqual(401);
+            });
+        });
+    });
+
+    test('GET /sounds/:id 404', () => {
+      return soundMock.create()
+        .then(mock => {
+          return superagent.get(`${apiURL}/sounds/${mock.sound}`)
+            .set('Authorization', `Bearer ${mock.tempAccount.token}`)
+            .then(Promise.reject)
+            .catch(res => {
+              expect(res.status).toEqual(404);
+            });
+        });
+    });
+  });
+
+  describe('DELETE /sounds/:id', () => {
+    test('DELETE /sounds/:id 204', () => {
+      return soundMock.create()
+        .then(mock => {
+          return superagent.delete(`${apiURL}/sounds/${mock.sound._id}`)
+            .set('Authorization', `Bearer ${mock.tempAccount.token}`)
+            .then(res => {
+              expect(res.status).toEqual(204);
+            });
+        });
+    });
+
+    test('DELETE /sounds/:id 404', () => {
+      return soundMock.create()
+        .then(mock => {
+          return superagent.delete(`${apiURL}/sounds/lol`)
+            .set('Authorization', `Bearer ${mock.tempAccount.token}`)
+            .then(Promise.reject)
+            .catch(res => {
+              expect(res.status).toEqual(404);
+            });
+        });
+    });
+
+    test('DELETE /sounds/:id 401', () => {
+      return soundMock.create()
+        .then(mock => {
+          return superagent.delete(`${apiURL}/sounds/${mock.sound._id}`)
+            .set('Authorization', `Bearer ${mock.tempAccount}`)
+            .then(Promise.reject)
+            .catch(res => {
+              expect(res.status).toEqual(401);
+            });
+        });
     });
   });
 });

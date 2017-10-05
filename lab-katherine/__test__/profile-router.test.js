@@ -64,27 +64,48 @@ describe('/profiles', () => {
 
   describe('GET /profiles/:id', () => {
     test('GET /profiles 200', () => {
-      return profileMock.create()
+      // let tempProfile;
+      // return profileMock.create()
+      //   .then(mock => {
+      //     tempProfile = mock;
+      //     return superagent.get(`${apiURL}/profiles/${mock.profile._id}`)
+      //       // .set('Authorization', `Bearer ${tempAccount.token}`)
+      //       // .auth(mock.request.username, mock.request.password);
+      //   })
+      // // let tempMock;
+      // // return profileMock.create()
+      // //   .then(mock => {
+      // //     tempMock = mock;
+      // //     return superagent.get(`${apiURL}/profiles/${mock.profile._id}`)
+      // //   })
+      //   .then(res => {
+      //     console.log(res.body);
+      //     expect(res.status).toEqual(200);
+      //   });
+    });
+
+    test('GET /profiles 404', () => {
+      return accountMock.create()
         .then(mock => {
-          return superagent.get(`${apiURL}/profiles/${mock.profile._id}`)
+          return superagent.get(`${apiURL}/profiles/gskjgnsjgn`)
             .auth(mock.request.username, mock.request.password);
         })
-        .then(res => {
-          expect(res.status).toEqual(200);
-          expect(res.body.token).toBeTruthy();
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(404);
         });
     });
 
-    // test('GET /profiles 404', () => {
-    //   return accountMock.create()
-    //     .then(mock => {
-    //       return superagent.get(`${apiURL}/profiles/gskjgnsjgn`)
-    //         .auth(mock.request.username, mock.request.password);
-    //     })
-    //     .then(Promise.reject)
-    //     .catch(res => {
-    //       expect(res.status).toEqual(404);
-    //     });
-    // });
+    test('GET /profiles 400', () => {
+      // return accountMock.create()
+      //   .then(mock => {
+      //     return superagent.get(`${apiURL}/profiles/${mock.account._id}`)
+      //       .auth(mock.request.username, mock.request.password);
+      //   })
+      //   .then(Promise.reject)
+      //   .catch(res => {
+      //     expect(res.status).toEqual(400);
+      //   });
+    });
   });
 });

@@ -32,4 +32,22 @@ module.exports = new Router()
       })
       .then(sound => res.json(sound))
       .catch(next);
+  })
+  .get('/sounds/:id', bearerAuth, (req, res, next) => {
+    Sound.findById(req.params.id)
+      .then(sound => {
+        if(!sound)
+          throw httpErrors(404, '__REQUEST_ERROR__ sound not found');
+        res.json(sound);
+      })
+      .catch(next);
+  })
+  .delete('/sounds/:id', bearerAuth, (req, res, next) => {
+    Sound.findByIdAndRemove(req.params.id)
+      .then(sound => {
+        if(!sound)
+          throw httpErrors(404, 'sound not found');
+        res.sendStatus(204);
+      })
+      .catch(next);
   });

@@ -7,12 +7,12 @@ const Sound = require('../../model/sound.js');
 const create = () => {
   let result = {};
   return accountMock.create()
-    .then( account => {
-      result.tempAccount = account;
+    .then( accountMock => {
+      result.tempAccount = accountMock;
       return new Sound({
-        account: account._id,
+        account: accountMock.account._id,
         title: faker.lorem.words(10),
-        url: faker.sound.sound(),
+        url: faker.image.image(),
       }).save();
     })
     .then(sound => {
