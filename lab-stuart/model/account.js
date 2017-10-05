@@ -17,7 +17,7 @@ const accountSchema  = mongoose.Schema({
 accountSchema.methods.passwordVerify = function(password){
   return bcrypt.compare(password, this.passwordHash)
   .then(correctPassword => {
-    if(!correctPassword) 
+    if(!correctPassword)
       throw httpErrors(401, '::AUTH_ERROR:: incorrect password');
     return this;
   });
@@ -34,9 +34,10 @@ accountSchema.methods.tokenCreate = function(){
 const Account = module.exports = mongoose.model('account', accountSchema);
 
 Account.create = function(data){
+  data = {...data};
   let {password} = data;
   delete data.password;
-  return bcrypt.hash(password, 8) 
+  return bcrypt.hash(password, 8)
   .then(passwordHash => {
     data.passwordHash = passwordHash;
     data.tokenSeed = crypto.randomBytes(64).toString('hex');

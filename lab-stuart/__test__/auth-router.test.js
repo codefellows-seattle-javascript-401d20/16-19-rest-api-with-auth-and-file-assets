@@ -44,16 +44,16 @@ describe('AUTH router', () => {
   });
 
   describe('GET /login', () => {
-    test.only('GET /login 200', () => {
+    test('GET /login 200', () => {
       return accountMock.create()
-        .then(mock => {
-          return superagent.get(`${apiURL}/login`)
-          .auth(mock.request.username, mock.request.password);
-        })
-        .then(res => {
-          expect(res.status).toEqual(200);
-          expect(res.body.token).toBeTruthy();
-        });
+      .then(mock => {
+        return superagent.get(`${apiURL}/login`)
+        .auth(mock.request.username, mock.request.password);
+      })
+      .then(res => {
+        expect(res.status).toEqual(200);
+        expect(res.body.token).toBeTruthy();
+      });
     });
 
     test('GET /login 400', () => {
