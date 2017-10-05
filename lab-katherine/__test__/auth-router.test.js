@@ -13,46 +13,48 @@ describe('AUTH router', () => {
   afterAll(server.stop);
   afterEach(accountMock.remove);
 
-  test('POST /signup with 200', () => {
-    let goodAccount = {
-      username: 'khanson',
-      email: 'khanson@gmail.com',
-      password:'himitsu',
-    };
-    return superagent.post(`${apiURL}/signup`)
-      .send(goodAccount)
-      .then(res => {
-        expect(res.status).toEqual(200);
-        expect(res.body.token).toBeTruthy();
-      });
-  });
-
-  test('POST /signup with 400', () => {
-    let badAccount = {
-      email: 'khanson@gmail.com',
-      password: 'himitsu',
-    };
-    return superagent.post(`${apiURL}/signup`)
-      .send(badAccount)
-      .then(Promise.reject)
-      .catch(res => {
-        expect(res.status).toEqual(400);
-      });
-  });
-
-  test('POST /signup with 409', () => {
-    return accountMock.create()
-      .then(mock => {
-        return superagent.post(`${apiURL}/signup`).send({
-          username: mock.request.username,
-          email: mock.request.email,
-          password: mock.request.password,
+  describe('POST /signup', () => {
+    test('POST /signup with 200', () => {
+      let goodAccount = {
+        username: 'khanson',
+        email: 'khanson@gmail.com',
+        password:'himitsu',
+      };
+      return superagent.post(`${apiURL}/signup`)
+        .send(goodAccount)
+        .then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body.token).toBeTruthy();
         });
-      })
-      .then(Promise.reject)
-      .catch(res => {
-        expect(res.status).toEqual(409);
-      });
+    });
+
+    test('POST /signup with 400', () => {
+      let badAccount = {
+        email: 'khanson@gmail.com',
+        password: 'himitsu',
+      };
+      return superagent.post(`${apiURL}/signup`)
+        .send(badAccount)
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
+    });
+
+    test('POST /signup with 409', () => {
+      return accountMock.create()
+        .then(mock => {
+          return superagent.post(`${apiURL}/signup`).send({
+            username: mock.request.username,
+            email: mock.request.email,
+            password: mock.request.password,
+          });
+        })
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(409);
+        });
+    });
   });
 
   describe('GET /login', () => {
