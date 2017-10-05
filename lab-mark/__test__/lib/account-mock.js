@@ -5,6 +5,7 @@ const Account = require('../../model/account.js');
 
 const accountMock = module.exports = {};
 
+// Resolves -> request, account, token
 accountMock.create = (password) => {
   let result = {
     request: {

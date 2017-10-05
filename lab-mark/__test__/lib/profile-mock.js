@@ -4,6 +4,7 @@ const accountMock = require('./account-mock.js');
 const Profile = require('../../model/profile.js');
 const faker = require('faker');
 
+// Resolves -> request, account, token, profile
 let create = () => {
   let result = {};
   return accountMock.create(faker.internet.password())

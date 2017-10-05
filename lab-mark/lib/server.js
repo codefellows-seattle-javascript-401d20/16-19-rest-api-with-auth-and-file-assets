@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const jsonParser = require('body-parser').json();
 const authRouter = require('../route/auth-router.js');
 const blogRouter = require('../route/blog-router.js');
+const imageRouter = require('../route/image-router.js');
 const profileRouter = require('../route/profile-router.js');
 
 
@@ -25,6 +26,7 @@ app.use(morgan(production ? 'combined' : 'dev'));
 // Register routes
 app.use(authRouter);
 app.use(blogRouter);
+app.use(imageRouter);
 app.use(profileRouter);
 
 // Register 404 route
