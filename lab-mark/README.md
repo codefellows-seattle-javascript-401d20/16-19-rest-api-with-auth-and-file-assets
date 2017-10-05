@@ -21,3 +21,14 @@ Create the following routes for performing CRUD opperations on your resourcee
   * On failure due to a bad request send a 400 status code
   * On failure due to an incorrect username, send a 404 status code
   * on failure due to an incorrect password, send a 401 status code
+* `POST /profiles`
+  * Passes data as stringifed JSON in the body of a **POST** request to create a new profile
+  * On success respond with a 200 status code and a token used to prove authentication
+  * On failure due to a bad request send a 400 status code
+  * On failure due to providing a bad token, send a 401 status code
+* `GET /profiles/:id`
+  * Passes data as stringifed JSON in the query of a **GET** request to login to an account.
+  * On success respond with a 200 status code and a token used to prove authentication
+  * On failure due to a bad ID, send a 404 status code
+  * On failure due to a bad request send a 400 status code
+  * On failure due to providing a bad token, send a 401 status code

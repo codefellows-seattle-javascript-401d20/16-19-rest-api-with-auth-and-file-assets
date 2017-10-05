@@ -21,7 +21,6 @@ const create = () => {
       }).save();
     })
     .then(image => {
-      console.log('STORING KEY ->', 'dog.jpg');
       result.image = image;
       return s3.upload({
         Bucket: process.env.AWS_BUCKET,

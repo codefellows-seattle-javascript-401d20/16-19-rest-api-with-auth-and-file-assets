@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs-extra');
 const multer = require('multer');
 const s3 = require('../lib/s3.js');
 const {Router} = require('express');
@@ -13,8 +14,13 @@ const imageRouter = module.exports = new Router();
 
 imageRouter.post('/images', bearerAuth, upload.any(), (req, res, next) => {
 
-  if(!req.body.title || req.files.length > 1 || req.files[0].fieldname !== 'image')
-    return next(httpErrors(400, '__REQUEST_ERROR__ title or image was not provided'));
+  if(!req.body.title || req.files.length > 1 || req.files[0].fieldname !== 'image') {
+    return Promise.all(req.files.map(file => fs.remove(file.path)))
+      .then(() => {
+        throw httpErrors(400, '__REQUEST_ERROR__ title or image was not provided');
+      })
+      .catch(next);
+  }
 
   let file = req.files[0];
 
