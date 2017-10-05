@@ -11,11 +11,11 @@ module.exports = (err, req, res, next) => {
   if(message.includes('objectid failed'))
     return res.sendStatus(404);
 
-  if(message.includes('duplicate key'))
-    return res.sendStatus(409);
-
   if(message.includes('validation failed'))
     return res.sendStatus(400);
+
+  if(message.includes('duplicate key'))
+    return res.sendStatus(409);
 
   if(message.includes('unauthorized'))
     return res.sendStatus(401);

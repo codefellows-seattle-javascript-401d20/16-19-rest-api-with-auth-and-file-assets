@@ -57,7 +57,7 @@ describe('AUTH router', () => {
 
   describe('GET /login', () => {
     test('GET /login 200', () => {
-      accountMock.create()
+      return accountMock.create()
         .then(mock => {
           return superagent.get(`${apiURL}/login`)
             .auth(mock.request.username, mock.request.password);
@@ -69,26 +69,25 @@ describe('AUTH router', () => {
     });
 
     test('GET /login 400', () => {
-      accountMock.create()
+      return accountMock.create()
         .then(mock => {
-          return superagent.get(`${apiURL}/login`)
-            .auth(mock.username, mock.password);
+          return superagent.get(`${apiURL}/login`);
         })
-        .then(res => {
-          expect(res.status).toEqual('400');
-          expect(res.body.token).toBeTruthy();
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(400);
         });
     });
 
     test('GET /login 401 due to bad password', () => {
-      accountMock.create()
+      return accountMock.create()
         .then(mock => {
           return superagent.get(`${apiURL}/login`)
             .auth(mock.request.username, 'nope');
         })
         .then(Promise.reject)
         .catch(res => {
-          expect(res.status).toEqual(200);
+          expect(res.status).toEqual(401);
         });
     });
 

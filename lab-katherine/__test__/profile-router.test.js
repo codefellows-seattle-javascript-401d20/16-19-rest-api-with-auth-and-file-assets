@@ -1,7 +1,6 @@
 'use strict';
 
 require('./lib/setup.js');
-
 const superagent = require('superagent');
 const server = require('../lib/server.js');
 const accountMock = require('./lib/account-mock.js');

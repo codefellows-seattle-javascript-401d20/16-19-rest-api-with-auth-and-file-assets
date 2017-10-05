@@ -17,6 +17,7 @@ module.exports = new Router()
       .catch(next);
   })
   .get('/login', basicAuth, (req, res, next) => {
+    console.log('req.account ', req.account);
     if(!req.account)
       return next(httpErrors(401, '__REQUEST_ERROR__ account not found'));
     req.account.tokenCreate()
