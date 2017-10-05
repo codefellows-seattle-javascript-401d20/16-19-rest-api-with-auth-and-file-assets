@@ -28,7 +28,8 @@ accountSchema.methods.tokenCreate = function() {
   this.tokenSeed = crypto.randomBytes(64).toString('hex');
   return this.save()
     .then(account => {
-      return jwt.sign({tokenSeed: account.tokenSeed}, process.env.CLOUD_SECRET);
+      let options = {expiresIn: '7d'};
+      return jwt.sign({tokenSeed: account.tokenSeed}, process.env.CLOUD_SECRET, options);
     });
 };
 

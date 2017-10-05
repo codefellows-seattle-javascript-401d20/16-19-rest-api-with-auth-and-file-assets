@@ -3,9 +3,6 @@
 const faker = require('faker');
 const accountMock = require('./account-mock.js');
 const Image = require('../../model/image.js');
-const fs = require('fs-extra');
-const aws = require('aws-sdk');
-const s3 = new aws.S3();
 
 // Resolves -> request, account, token,  image
 const create = () => {
@@ -22,15 +19,8 @@ const create = () => {
     })
     .then(image => {
       result.image = image;
-      return s3.upload({
-        Bucket: process.env.AWS_BUCKET,
-        Key: 'dog.jpg',
-        ACL: 'public-read',
-        Body: fs.createReadStream(`${__dirname}/../asset/dog.jpg`),
-      })
-        .promise();
-    })
-    .then(() => result);
+      return result;
+    });
 };
 
 const remove = () => {

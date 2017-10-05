@@ -23,20 +23,6 @@ awsSDKMock.mock('S3', 'upload', (params, callback) => {
   callback(null, {Location: faker.internet.url()});
 });
 
-awsSDKMock.mock('S3', 'getObject', (params, callback) => {
-  if(!params.Key || !params.Bucket )
-    return callback(new Error('__AWS_USAGE_ERROR__ key bucket required'));
-  if(params.AWS_BUCKET !== process.env.BUCKET)
-    return callback(new Error('__AWS_USAGE_ERROR__ wrong bucket'));
-  callback(null, {'AcceptRanges': 'bytes',
-    'Body': {'data': [0,1,2,3], 'type': 'Buffer'},
-    'ContentLength': 26042,
-    'ContentType': 'application/octet-stream',
-    'ETag': '\'127ae452c139122549b032b9a6e0b2de\'',
-    'LastModified': '2017-10-05T10:13:38.000Z',
-    'Metadata': {}});
-});
-
 awsSDKMock.mock('S3', 'deleteObject', (params, callback) => {
   if(!params.Key || !params.Bucket )
     return callback(new Error('__AWS_USAGE_ERROR__ key bucket required'));

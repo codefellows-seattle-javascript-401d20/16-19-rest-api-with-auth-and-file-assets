@@ -1,7 +1,6 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const httpErrors = require('http-errors');
 const Profile = require('./profile.js');
 
 const blogSchema = mongoose.Schema({
@@ -15,8 +14,6 @@ const blogSchema = mongoose.Schema({
 blogSchema.pre('save', function(done){
   Profile.findById(this.profile)
     .then(profile => {
-      if(!profile)
-        throw httpErrors(404, 'profile not found');
       profile.blogs.push(this._id);
       return profile.save();
     })
@@ -27,8 +24,6 @@ blogSchema.pre('save', function(done){
 blogSchema.post('remove', function(doc, done) {
   Profile.findById(doc.profile)
     .then(profile => {
-      if(!profile)
-        throw httpErrors(404, 'profile not found');
       profile.blogs = profile.blogs.filter(blog => {
         return blog.toString() !== doc._id.toString();
       });

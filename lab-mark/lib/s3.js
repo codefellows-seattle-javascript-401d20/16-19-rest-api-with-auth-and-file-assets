@@ -22,14 +22,6 @@ const upload = (path, key) => {
     });
 };
 
-const get = (key) => {
-  return s3.getObject({
-    Bucket: process.env.AWS_BUCKET,
-    Key: key,
-  })
-    .promise();
-};
-
 const remove = (key) => {
   return s3.deleteObject({
     Bucket: process.env.AWS_BUCKET,
@@ -38,4 +30,4 @@ const remove = (key) => {
     .promise();
 };
 
-module.exports = {upload, get, remove};
+module.exports = {upload, remove};

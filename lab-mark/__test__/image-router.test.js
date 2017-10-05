@@ -37,12 +37,12 @@ describe('/images', () => {
         });
     });
 
-    test('400 mispelled title', () => {
+    test('400 mispelled required field', () => {
       return accountMock.create(faker.internet.password())
         .then(accountMock => {
           return superagent.post(`${apiURL}/images`)
             .set('Authorization', `Bearer ${accountMock.token}`)
-            .field('tile', 'Chillax Dog')
+            .field('tile', 'Chillax Dog') // Mispelled title
             .field('description', 'A dog that is chillin')
             .attach('image', `${__dirname}/asset/dog.jpg`)
             .then(Promise.reject)
@@ -70,14 +70,19 @@ describe('/images', () => {
 
   describe('GET /images', () => {
     test('200', () => {
+      let tempResult;
       return imageMock.create()
         .then(result => {
+          tempResult = result;
           return superagent.get(`${apiURL}/images/${result.image._id}`)
             .set('Authorization', `Bearer ${result.token}`);
         })
         .then(res => {
-          expect(res.body.Body).toBeTruthy();
           expect(res.status).toEqual(200);
+          expect(res.body.url).toEqual(tempResult.image.url);
+          expect(res.body.title).toEqual(tempResult.image.title);
+          expect(res.body.description).toEqual(tempResult.image.description);
+          expect(res.body.account.toString()).toEqual(tempResult.account._id.toString());
         });
     });
 
@@ -106,7 +111,7 @@ describe('/images', () => {
     });
   });
 
-  describe('DELETE /images  200', () => {
+  describe('DELETE /images', () => {
     test('200', () => {
       return accountMock.create(faker.internet.password())
         .then(() => {
