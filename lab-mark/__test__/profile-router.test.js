@@ -25,8 +25,8 @@ describe('/profiles', () => {
             .set('Authorization', `Bearer ${tempAccount.token}`)
             .send({
               bio: 'hello world',
-              firstName: 'Mary',
-              lastName: 'Bean',
+              firstName: 'Darcy',
+              lastName: 'Balaka',
             });
         })
         .then(res => {
@@ -35,8 +35,8 @@ describe('/profiles', () => {
           expect(res.body.email).toEqual(tempAccount.request.email);
           expect(res.body.account).toEqual(tempAccount.account._id.toString());
           expect(res.body.bio).toEqual('hello world');
-          expect(res.body.firstName).toEqual('Mary');
-          expect(res.body.lastName).toEqual('Bean');
+          expect(res.body.firstName).toEqual('Darcy');
+          expect(res.body.lastName).toEqual('Balaka');
         });
     });
 
