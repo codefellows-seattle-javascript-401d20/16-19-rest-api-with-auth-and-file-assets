@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest -i --coverage",
     "test-watch": "jest -i --coverage --watch",
-    "dbon": "mkdir -p ./db && mongod --dbpath ./db",
+    "dbon": "mkdir -p $HOME/db && mongod --dbpath $HOME/db",
     "dboff": "killall mongod",
     "watch": "nodemon index.js",
     "start": "nodemon index.js",
