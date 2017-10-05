@@ -42,11 +42,10 @@ describe('AUTH router', () => {
   });
 
   describe('GET /login', () => {
-    test('GET /login 200', () => {
-      let tempMock;
-      accountMock.create()
+    test.only('GET /login 200', () => {
+      return accountMock.create()
       .then(mock => {
-        tempMock = mock;
+        console.log('mock: ', mock)
         return superagent.get(`${apiURL}/login`)
         .auth(mock.request.username, mock.request.password);
       })

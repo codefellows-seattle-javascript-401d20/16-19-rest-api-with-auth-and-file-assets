@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const cors = require('cors');
 const morgan = require('morgan');
@@ -14,6 +14,7 @@ app.use(cors({origin: process.env.CORS_ORIGIN}));
 app.use(morgan(production ? 'combined' : 'dev'));
 
 app.use(require('../route/auth-router.js'));
+app.use(require('../route/image-router.js'));
 app.use(require('../route/sandwich-router.js'));
 app.all('*', (req, res) => res.sendStatus(404));
 app.use(require('./error-middleware.js'));
