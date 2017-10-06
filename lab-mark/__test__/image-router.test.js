@@ -112,7 +112,7 @@ describe('/images', () => {
   });
 
   describe('DELETE /images', () => {
-    test('200', () => {
+    test('204', () => {
       return accountMock.create(faker.internet.password())
         .then(() => {
           return imageMock.create()
