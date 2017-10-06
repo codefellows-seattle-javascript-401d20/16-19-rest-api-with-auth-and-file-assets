@@ -4,6 +4,7 @@ const {Router} = require('express');
 const jsonParser = require('body-parser').json();
 const Account = require('../model/account.js');
 const httpErrors = require('http-errors');
+const basicAuth = require('../lib/basic-auth-middleware.js');
 
 module.exports = new Router()
   .post('/signup', jsonParser, (request, response, next) => {
@@ -14,6 +15,12 @@ module.exports = new Router()
       .then(user => user.tokenCreate())
       .then(token => response.json({token}))
       .catch(next);
-  });
+  })
 
-//login()
+  .get('./login', basicAuth, (request, response, next) => {
+    if(!request.account)
+      return next(httpErrors(401, '__REQUEST_ERROR__account not found'));
+    request.account.tokenCreate()
+      .then(token => response.json({token}))
+      .catch(next);
+  });
