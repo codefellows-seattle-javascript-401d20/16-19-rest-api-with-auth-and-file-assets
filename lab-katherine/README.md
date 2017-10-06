@@ -1,50 +1,29 @@
 ![cf](https://i.imgur.com/7v5ASc8.png) Lab 13: Express and Mongo two resoruce REST API
 ======
 
-## Submission Instructions
-* Work in a fork of this repository
-* Work in a branch on your fork
-* Write all of your code in a directory named `lab-` + `<your name>` **e.g.** `lab-susan`
-* Open a pull request to this repository
-* Submit on canvas a question and observation, how long you spent, and a link to your pull request
-
-## Resources
-* [express docs](http://expressjs.com/en/4x/api.html)
-* [mongoosse guide](http://mongoosejs.com/docs/guide.html)
-* [mongoosse api docs](http://mongoosejs.com/docs/api.html)
-
-## Configuration 
-Configure the root of your repository with the following files and directories. Thoughfully name and organize any aditional configuration or module files.
-* **README.md** - contains documentation
-* **.env** - contains env variables **(should be git ignored)**
-* **.gitignore** - contains a [robust](http://gitignore.io) `.gitignore` file 
-* **.eslintrc** - contains the course linter configuratoin
-* **.eslintignore** - contains the course linter ignore configuration
-* **package.json** - contains npm package config
-  * create a `lint` script for running eslint
-  * create a `test` script for running tests
-  * create a `start` script for running your server
-  * create `dbon` and `dboff` scripts for managing the mongo daemon
-* **db/** - contains mongodb files **(should be git ignored)**
-* **lib/** - contains module definitions
-* **model/** - contains module definitions
-* **route/** - contains module definitions
-* **\_\_test\_\_/** - contains test modules
-
-## Feature Tasks  
-For this assignment you will be building a RESTful HTTP server with basic authentication useing express.
-
-#### Account
-Create a user `Account` model that keeps track of a username, email, hashed password, and token seed. The model should be able to regenorate tokens using json web token. 
 
 #### Server Endpoints
-* `POST /signup` 
-  * pass data as stringifed JSON in the body of a **POST** request to create a new account
-  * on success respond with a 200 status code and an authentication token
-  * on failure due to a bad request send a 400 status code
-
-## Tests
-* POST should test for 200, 400, and 409 (if any keys are unique)
-
-## Documentation
-In the README.md write documention for starting your server and makeing requests to each endpoint it provides. The documentaion should describe how the server would respond to valid and invalid requests.
+* `POST /<resource-name>`
+  * pass a request with a resource.
+    * For an account, resource should have at least a username, email, and password.
+    * For a profile, resource should have at least a username, email, and account.
+    * For a sound, resource should have at least a title, url, and account.
+  * if all required fields are present, respond with a 200 success code and an authentication token
+  * if not all required fields are present, respond with a 400 status code
+  * for an account, if a request is made for a duplicate of a unique key, respond with a 409 status code
+  * for a profile or sound, if a request is made with a bad token or lack of token, respond with a 401 status code
+* `GET /login` and `GET /<resource-name>?id={id}`
+  * pass a request with /login for account, or a /<resource-name> path with an id for a profile or sound
+    * for /login, use authentication middleware to log in a user
+      * if the login succeeds, respond with a 200 success code
+      * if the login is missing authentication, respond with a 400 status code
+      * if the login's authentication includes a bad password or bad account, respond with a 401 status code
+    * for profile or sound, pass a bearer authentication token in the request to authorize the creation of the resource
+      * on success, respond with a 200 status code and an authentication token
+      * on failure due to a bad id, send a 404 status code
+      * on failure due to bad token or lack of token, respond with a 401 status code
+* `DELETE /api/<resource-name?id={id}>`
+  *  pass a request with an /api/<resource-name> path for sounds
+    * with an existing id in the query string, the program should delete a resource with the given id and return a 204 status code with no content in the body
+    *  with a non-existent id in the query string, the program should respond with a 404 status code
+    *  with a bad token or lack of token in the query string, the program should respond with a 401 status code
