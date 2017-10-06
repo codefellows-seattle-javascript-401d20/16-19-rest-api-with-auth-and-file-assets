@@ -6,22 +6,26 @@ This is an authentication / authorization router example. Users can signup for a
 Authorization and Authentication are handled via Basic and Bearer Auth.
 
 ## Routes:
-- `/signup`
+
+### `/signup`
 #### POST: Required: `email` (unique), `username` (unique), and `password` string values.
 
-- `/login`
+### `/login`
 #### GET: Requires username and password for Basic Auth.
 
-- `/sandwiches`
+### `/sandwiches`
 #### POST: Required: `title` (unique), `bread`. Optional: `cheese`, `spread`, `veggies`.
-- `/sandwiches/:id`
+
+### `/sandwiches/:id`
 #### GET: Requires valid ID in URL.
 
-- `/images`
+### `/images`
 #### POST: Required: `title` (unique).
-- `/images/:id`
+
+### `/images/:id`
 #### GET: Requires valid ID in URL.
-- `/images/:id`
+
+### `/images/:id`
 #### DELETE: Requires valid ID in URL.
 
 ## Testing
