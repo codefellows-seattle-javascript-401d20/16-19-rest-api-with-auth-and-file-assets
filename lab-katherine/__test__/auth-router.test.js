@@ -7,7 +7,6 @@ const accountMock = require('./lib/account-mock.js');
 
 const apiURL = `http://localhost:${process.env.PORT}`;
 
-console.log('apiURL', apiURL);
 describe('AUTH router', () => {
   beforeAll(server.start);
   afterAll(server.stop);

@@ -18,12 +18,10 @@ module.exports = new Router()
 
 
     let file = req.files[0];
-    console.log(file);
 
     let key = `${file.filename}.${file.originalname}`;
     return s3.upload(file.path, key)
       .then(url => {
-        console.log('url', url);
         return new Sound({
           title: req.body.title,
           account: req.account._id,
