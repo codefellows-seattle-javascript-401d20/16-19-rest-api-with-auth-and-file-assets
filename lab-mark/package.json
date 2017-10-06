@@ -1,0 +1,45 @@
+{
+  "name": "lab-mark",
+  "version": "1.0.0",
+  "description": "![CF](https://camo.githubusercontent.com/70edab54bba80edb7493cad3135e9606781cbb6b/687474703a2f2f692e696d6775722e636f6d2f377635415363382e706e67) Code-401-Javascript Lab-16-19 === This is day 16-19 of lab with Code Fellows. The purpose of the labs is to teach students how to use authentication within node in order to be give users authorization to access other API end points. ### How to start server: In a terminal, navigate to the lab-mark directory and install the required dependencies by typing `npm i`. Refer to the commands below to interact with the software. * ##### Start the database: `npm run dbon` * ##### Start the server: `npm run start` * ##### Close the database: `npm run dboff` ### Making requests: After the server has been turned on, different requests can be made to it. You can use any tool to accomplish this, we recommend POSTMAN or httpie. #### Server Endpoints Create the following routes for performing CRUD opperations on your resourcee * `POST /signup`   * Passes data as stringifed JSON in the body of a **POST** request to create a new account   * On success respond with a 200 status code and a token used to prove authentication   * On failure due to a bad request send a 400 status code   * On failure due to duplicate user/emails provided, send a 409 status code * `GET /login`   * Passes data as stringifed JSON in the query of a **GET** request to login to an account.   * On success respond with a 200 status code and a token used to prove authentication   * On failure due to a bad request send a 400 status code   * On failure due to an incorrect username, send a 404 status code   * on failure due to an incorrect password, send a 401 status code",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "engines": {
+    "node": "8.4.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.127.0",
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.1",
+    "fs-extra": "^4.0.2",
+    "http-errors": "^1.6.2",
+    "jsonwebtoken": "^8.0.1",
+    "mongoose": "^4.12.0",
+    "morgan": "^1.9.0",
+    "multer": "^1.3.0"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^1.7.0",
+    "faker": "^4.1.0",
+    "jest": "^21.2.1",
+    "nodemon": "^1.12.1",
+    "superagent": "^3.6.2"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "start": "node index.js",
+    "test": "jest -i --coverage",
+    "dbon": "mkdir -p ./db && mongod --dbpath ./db",
+    "dboff": "killall mongod",
+    "watch": "nodemon index.js",
+    "test-watch": "jest -i --coverage --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
