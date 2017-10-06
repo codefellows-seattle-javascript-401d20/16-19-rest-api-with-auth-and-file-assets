@@ -90,6 +90,33 @@ describe('/sandwiches', () => {
         });
       });
     });
+
+    test('GET /sandwiches/:id 400 due to missing Authorization header', () => {
+      let tempMock;
+      return sandwichMock.create()
+      .then(mock => {
+        tempMock = mock;
+        return superagent.get(`${apiURL}/sandwiches/${mock.sandwich._id}`)
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
+      });
+    });
+
+    test('GET /sandwiches/:id 401 due to bad token', () => {
+      let tempMock;
+      return sandwichMock.create()
+      .then(mock => {
+        tempMock = mock;
+        return superagent.get(`${apiURL}/sandwiches/${mock.sandwich._id}`)
+        .set('Authorization', `Bearer badToken`)
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+      });
+    });
   });
 
 });

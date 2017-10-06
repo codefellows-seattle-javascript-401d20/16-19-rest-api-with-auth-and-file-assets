@@ -17,12 +17,10 @@ module.exports = new Router()
     return next(httpErrors(400, '::REQUEST_ERROR:: title or image was not provided'));
 
   let file = req.files[0];
-  console.log(file);
 
   let key = `${file.filename}.${file.originalname}`;
   return s3.upload(file.path, key)
   .then(url => {
-    console.log('url', url);
     return new Image({
       title: req.body.title,
       account: req.account._id,
