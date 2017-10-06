@@ -15,8 +15,8 @@ app.use(cors({ origin: process.env.CORS_ORIGIN }));
 app.use(morgan(production ? 'combined' : 'dev'));
 
 // routes
-app.use(require('../route/auth-route.js'));
-app.use(require('../route/profile-route.js'));
+app.use(require('../route/auth-router.js'));
+app.use(require('../route/profile-router.js'));
 app.all('*', (req, res) => res.sendStatus(400));
 app.use(require('./error-middleware.js'));
 
