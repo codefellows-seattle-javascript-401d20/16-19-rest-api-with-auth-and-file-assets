@@ -13,6 +13,7 @@ addons:
 env:
   - CXX=g++-4.8
 sudo: required
-before_script: npm i
+before_script: cd lab-mark
 script:
+  - npm i
   - npm test
