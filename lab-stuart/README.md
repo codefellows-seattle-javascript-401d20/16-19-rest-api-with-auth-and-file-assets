@@ -7,22 +7,22 @@ Authorization and Authentication are handled via Basic and Bearer Auth.
 
 ## Routes:
 - `/signup`
-# POST: Required: `email` (unique), `username` (unique), and `password` string values.
+#### POST: Required: `email` (unique), `username` (unique), and `password` string values.
 
 - `/login`
-# GET: Requires username and password for Basic Auth.
+#### GET: Requires username and password for Basic Auth.
 
 - `/sandwiches`
-# POST: Required: `title` (unique), `bread`. Optional: `cheese`, `spread`, `veggies`.
+#### POST: Required: `title` (unique), `bread`. Optional: `cheese`, `spread`, `veggies`.
 - `/sandwiches/:id`
-# GET: Requires valid ID in URL.
+#### GET: Requires valid ID in URL.
 
 - `/images`
-# POST: Required: `title` (unique).
+#### POST: Required: `title` (unique).
 - `/images/:id`
-# GET: Requires valid ID in URL.
+#### GET: Requires valid ID in URL.
 - `/images/:id`
-# DELETE: Requires valid ID in URL.
+#### DELETE: Requires valid ID in URL.
 
 ## Testing
 `npm test` from root /.
