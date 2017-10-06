@@ -1,11 +1,10 @@
 require('./lib/setup.js');
-const superagent = require('superagent');
-const server = require('../server.js');
-const accountMock = require('.lib/account-mock.js');
-
+const server = require('../lib/server.js');
+const http = require('http');
+const accountMock = require('./lib/account-mock.js');
 const apiURL = `hhtp://localhost:${process.env.PORT}`;
+const superagent = require('superagent');
 
-console.log('apiURL' apiURL);
 describe('AUTH router', () => {
   beforeAll(server.start)
   afterAll(server.stop)
@@ -19,12 +18,12 @@ describe('AUTH router', () => {
       password: 'secret',
     })
     .then(response => {
-      expect(response.status).toEqual(200)
-      expect(response.body.token).toBeTruthy()
+      expect(response.status).toEqual(200);
+      expect(response.body.token).toBeTruthy();
     })
   })
 
-  test('POST /signup with 400', () => {
+  test('POST /signup with 400 no userName provided', () => {
     return superagent.post(`${apiURL}/signup`)
     .send({
       email: 'penssake@test.com',
@@ -32,17 +31,33 @@ describe('AUTH router', () => {
     })
     .then(Promise.reject)
     .catch(response => {
-      expect(response.status(400))
+      expect(response.status).toEqual(400);
+    });
+  });
+
+  test('POST /signup with 400 no email provided', () => {
+    return superagent.post(`${apiURL}/signup`)
+    .send({
+      userName: 'penssake',
+      password: 'secret',
     })
-  })
+    .then(Promise.reject)
+    .catch(response => {
+      expect(response.status).toEqual(400);
+    });
+  });
 
-  test('', () => {
-  })
+  test('POST /signup with 400 no password provided', () => {
+    return superagent.post(`${apiURL}/signup`)
+    .send({
+      userName: 'penssake',
+      password: 'secret',
+    })
+    .then(Promise.reject)
+    .catch(response => {
+      expect(response.status).toEqual(400);
+    });
 
-  test('', () => {
-  })
 
-  test('', () => {
-  })
-
-})
+});
+});

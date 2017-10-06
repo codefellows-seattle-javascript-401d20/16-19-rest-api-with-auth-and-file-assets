@@ -1,3 +1,5 @@
+'use strict';
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -32,7 +34,7 @@ accountSchema.methods.createToken = function(){//why not arrow function
 const Account = module.exports = mongoose.model('account', accountSchema);
 
 Account.create = function(data){
-  let {password} = data;
+  let password = data;
   delete data.password;
   return bcrypt.hash(password, 8)//not linier growing by multiples
     .then(passwordHash => {

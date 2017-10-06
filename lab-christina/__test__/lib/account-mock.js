@@ -12,21 +12,18 @@ const create = () => {
     },
   };
 
-  return Account.create(result.request)
+return Account.create(result.request)
     .then(account => {
-      result.account = account;
-      return account.tokenCreate();
+      result.account = account;//cache the account on result
+      return account.tokenCreate(); //generate the token
     })
+
     .then(token => {
-      result.account = account;
-      return account.tokenCreate();
-    })
-    .then(token => {
-      result.token = token;
-      return Account.findById(result.account._id);
+      result.token = token;//cache the token
+      return Account.findById(result.account._id);//rrequest the updated account
     })
     .then(account => {
-      result.account = account;
+      result.account = account; //overwrite the cached account with the updated account
       return result;
     });
 };
