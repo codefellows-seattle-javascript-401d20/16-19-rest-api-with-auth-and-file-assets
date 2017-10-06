@@ -6,6 +6,9 @@
   "directories": {
     "lib": "lib"
   },
+  "engines": {
+    "node": "8.4.0"
+  },
   "dependencies": {
     "aws-sdk": "^2.127.0",
     "bcrypt": "^1.0.3",
