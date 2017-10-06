@@ -15,7 +15,7 @@ describe('/images', () => {
   afterEach(imageMock.remove);
 
   describe('POST /images', () => {
-    test('POST /images  200', () => {
+    test('POST /images 200 should return an image', () => {
       let tempAccountMock;
       return accountMock.create()
       .then(accountMock => {
@@ -30,6 +30,37 @@ describe('/images', () => {
           expect(res.body._id).toBeTruthy();
           expect(res.body.url).toBeTruthy();
           expect(res.body.account).toEqual(tempAccountMock.account._id.toString());
+        });
+      });
+    });
+
+    test('POST /images  400 due to missing Authorization header', () => {
+      let tempAccountMock;
+      return accountMock.create()
+      .then(accountMock => {
+        tempAccountMock = accountMock;
+        return superagent.post(`${apiURL}/images`)
+        .field('title', 'delicious cheesy sandwich')
+        .attach('image', `${__dirname}/asset/sandwich.jpg`)
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
+      });
+    });
+
+    test('POST /images  401 due to bad token', () => {
+      let tempAccountMock;
+      return accountMock.create()
+      .then(accountMock => {
+        tempAccountMock = accountMock;
+        return superagent.post(`${apiURL}/images`)
+        .set('Authorization', `Bearer badToken`)
+        .field('title', 'delicious cheesy sandwich')
+        .attach('image', `${__dirname}/asset/sandwich.jpg`)
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(401);
         });
       });
     });
@@ -79,5 +110,20 @@ describe('/images', () => {
         });
       });
     });
+
+    test('GET /images/:id 404', () => {
+      let tempMock;
+      return imageMock.create()
+      .then(mock => {
+        tempMock = mock;
+        return superagent.get(`${apiURL}/images/badId`)
+        .set('Authorization', `Bearer ${mock.tempAccount.token}`)
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(404);
+        });
+      });
+    });
+
   });
 });

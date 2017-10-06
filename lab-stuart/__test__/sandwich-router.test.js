@@ -58,7 +58,7 @@ describe('/sandwiches', () => {
 
     test('POST /sandwiches 401 due to bad token', () => {
       return superagent.post(`${apiURL}/sandwiches`)
-      .set('Authorization', `Bearer badtoken`)
+      .set('Authorization', `Bearer badToken`)
       .send({
         title: 'Badass Sammy',
         bread: 'White',
@@ -100,6 +100,20 @@ describe('/sandwiches', () => {
         .then(Promise.reject)
         .catch(res => {
           expect(res.status).toEqual(400);
+        });
+      });
+    });
+
+    test('GET /sandwiches/:id 404', () => {
+      let tempMock;
+      return sandwichMock.create()
+      .then(mock => {
+        tempMock = mock;
+        return superagent.get(`${apiURL}/sandwiches/fake_id`)
+        .set('Authorization', `Bearer ${mock.tempAccount.token}`)
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(404);
         });
       });
     });
