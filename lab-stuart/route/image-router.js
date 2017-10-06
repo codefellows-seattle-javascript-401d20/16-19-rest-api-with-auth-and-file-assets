@@ -40,4 +40,13 @@ module.exports = new Router()
     res.json(image);
   })
   .catch(next);
+})
+.delete('/images/:id', bearerAuth, (req, res, next) => {
+  Image.findByIdAndRemove(req.params.id)
+  .then(image => {
+    if(!image)
+      throw httpErrors(404, '::REQUEST_ERROR:: image not found');
+    res.sendStatus(204);
+  })
+  .catch(next);
 });
