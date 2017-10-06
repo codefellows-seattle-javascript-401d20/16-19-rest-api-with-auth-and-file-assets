@@ -13,7 +13,10 @@ module.exports = new Router()
 
     Account.create(req.body)
       .then(user => user.tokenCreate())
-      .then(token => res.json({token}))
+      .then(token => {
+        res.cookie('X-Labkatherine-Token', token, {maxAge: 604800000});
+        res.json({token});
+      })
       .catch(next);
   })
   .get('/login', basicAuth, (req, res, next) => {
@@ -21,6 +24,9 @@ module.exports = new Router()
     if(!req.account)
       return next(httpErrors(401, '__REQUEST_ERROR__ account not found'));
     req.account.tokenCreate()
-      .then(token => res.json({token}))
+      .then(token => {
+        res.cookie('X-Labkatherine-Token', token, {maxAge: 604800000});
+        res.json({token});
+      })
       .catch(next);
   });
