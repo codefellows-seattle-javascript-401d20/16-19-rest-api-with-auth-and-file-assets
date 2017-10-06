@@ -16,4 +16,13 @@ module.exports = new Router()
   }).save()
   .then(sandwich => res.json(sandwich))
   .catch(next)
+})
+.get('/sandwiches/:id', bearerAuth, (req, res, next) => {
+  Sandwich.findById(req.params.id)
+  .then(sandwich => {
+    if(!sandwich)
+      throw httpErrors(404, '::REQUEST_ERROR:: sandwich not found');
+    res.json(sandwich);
+  })
+  .catch(next);
 });

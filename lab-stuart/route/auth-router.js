@@ -10,7 +10,6 @@ module.exports = new Router()
 .post('/signup', jsonParser, (req, res, next) => {
   if(!req.body.username || !req.body.email || !req.body.password)
     return next(httpErrors(400, '::REQUEST_ERROR:: username, email, and password are required'));
-
   Account.create(req.body)
   .then(user => user.tokenCreate())
   .then(token => {

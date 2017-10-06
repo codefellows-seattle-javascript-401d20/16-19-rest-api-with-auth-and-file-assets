@@ -41,6 +41,21 @@ describe('/sandwiches', () => {
       });
     });
 
+    test('POST /sandwiches 400 due to missing Authorization header', () => {
+      return superagent.post(`${apiURL}/sandwiches`)
+      .send({
+        title: 'Badass Sammy',
+        bread: 'White',
+        cheese: 'Cheddar',
+        spread: ['Mayo', 'Mustard'],
+        veggies: ['Lettuce', 'Onions'],
+      })
+      .then(Promise.reject)
+      .catch(res => {
+        expect(res.status).toEqual(400);
+      });
+    });
+
     test('POST /sandwiches 401 due to bad token', () => {
       return superagent.post(`${apiURL}/sandwiches`)
       .set('Authorization', `Bearer badtoken`)
@@ -57,4 +72,24 @@ describe('/sandwiches', () => {
       });
     });
   });
+
+  describe('GET /sandwiches', () => {
+    test('GET /sandwiches/:id 200', () => {
+      let tempMock;
+      return sandwichMock.create()
+      .then(mock => {
+        tempMock = mock;
+        return superagent.get(`${apiURL}/sandwiches/${mock.sandwich._id}`)
+        .set('Authorization', `Bearer ${mock.tempAccount.token}`)
+        .then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body.title).toEqual(tempMock.sandwich.title);
+          expect(res.body.bread).toEqual(tempMock.sandwich.bread);
+          expect(res.body._id).toEqual(tempMock.sandwich._id.toString());
+          expect(res.body.account).toEqual(tempMock.tempAccount.account._id.toString());
+        });
+      });
+    });
+  });
+
 });
