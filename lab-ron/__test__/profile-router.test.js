@@ -20,11 +20,6 @@ describe('/profiles', () => {
       return accountMock.create()
         .then(mock => {
           tempAccount = mock;
-
-          console.log('TEMP', tempAccount);
-
-
-          console.log('MOCK:', mock);
           return superagent.post(`${apiURL}/profiles`)
             .set('Authorization', `Bearer ${tempAccount.token}`)
             .send({
@@ -35,17 +30,17 @@ describe('/profiles', () => {
             });
         })
         .then(res => {
-          console.log(`
- 
-         STATUS: ${res.status}
-         USERNAME: ${res.body.username}
-         BODY: ${res.body.email}
-         ACCOUNT: ${res.body.account}
-         BIO: ${res.body.bio}
-         FIRSTNAME: ${res.body.firstName}
-         LASTNAME: ${res.body.lastName}
-          
-          `);
+          //   console.log(`
+
+          //  STATUS: ${res.status}
+          //  USERNAME: ${res.body.username}
+          //  BODY: ${res.body.email}
+          //  ACCOUNT: ${res.body.account}
+          //  BIO: ${res.body.bio}
+          //  FIRSTNAME: ${res.body.firstName}
+          //  LASTNAME: ${res.body.lastName}
+
+          //   `);
 
           expect(res.status).toEqual(200);
           // expect(res.body.username).toEqual(tempAccount.request.username);

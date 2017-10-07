@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const httpErrors = require('http-errors');
 
 const accountSchema = mongoose.Schema({
-  passwordHash: { type: String, require: true },
+  passwordHash: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   username: { type: String, required: true, unique: true },
   tokenSeed: { type: String, required: true, unique: true },
@@ -27,13 +27,15 @@ accountSchema.methods.tokenCreate = function () {
   this.tokenSeed = crypto.randomBytes(64).toString('hex');// ask questions about this
   return this.save()
     .then(account => {
-      return jwt.sign({ tokenSeed: account.tokenSeed }, process.env.IMAGR_SECRET);
+      let options = { expiresIn: '15d' };
+      return jwt.sign({ tokenSeed: account.tokenSeed }, process.env.IMAGR_SECRET, options);
     });
 };
 
 const Account = module.exports = mongoose.model('account', accountSchema);
 
 Account.create = function (data) {
+  data = { ...data };
   let { password } = data;
   delete data.password;
   return bcrypt.hash(password, 8)

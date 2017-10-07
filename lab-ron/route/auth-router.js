@@ -13,13 +13,19 @@ module.exports = new Router()
 
     Account.create(req.body)
       .then(user => user.tokenCreate())
-      .then(token => res.json({ token }))
+      .then(token => {
+        res.cookie('Imagr-Token', token, { maxAge: 604800000 });
+        res.json({ token });
+      })
       .catch(next);
   })
   .get('/login', basicAuth, (req, res, next) => {
     if (!req.account)
       return next(httpErrors(401, 'REQUEST ERROR: account not found'));
     req.account.tokenCreate()
-      .then(token => res.json({ token }))
+      .then(token => {
+        res.cookie('Imagr-Token', token, { maxAge: 604800000 });
+        res.json({ token });
+      })
       .catch(next);
   });

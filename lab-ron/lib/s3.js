@@ -25,7 +25,7 @@ const upload = (path, key) => {
 const remove = (key) => {
   return s3.deleteObject({
     Key: key,
-    Bucket: process.env.Bucket,
+    Bucket: process.env.AWS_Bucket,
   })
     .promise();
 };

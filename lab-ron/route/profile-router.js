@@ -17,7 +17,7 @@ module.exports = new Router()
       email: req.account.email,
     }).save()
       .then(profile => res.json(profile))
-      .catch(next)
+      .catch(next);
   });
 
 

@@ -16,8 +16,9 @@ app.use(morgan(production ? 'combined' : 'dev'));
 
 // routes
 app.use(require('../route/auth-router.js'));
+app.use(require('../route/image-router.js'));
 app.use(require('../route/profile-router.js'));
-app.all('*', (req, res) => res.sendStatus(400));
+app.all('*', (req, res) => res.sendStatus(404));
 app.use(require('./error-middleware.js'));
 
 module.exports = {
