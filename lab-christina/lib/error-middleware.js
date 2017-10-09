@@ -17,7 +17,9 @@ module.exports = (error, request, response, next) => {
   if(message.includes('duplicate key'))
     return response.sendStatus(409);
 
-
+  if(message.includes('unauthorized'))
+    return response.sendStatus(401);
+    
   response.sendStatus(500);
 
 };

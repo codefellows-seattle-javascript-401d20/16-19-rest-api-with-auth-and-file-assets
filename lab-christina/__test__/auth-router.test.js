@@ -1,63 +1,77 @@
+'use strict';
+
 require('./lib/setup.js');
+const superagent = require('superagent');
 const server = require('../lib/server.js');
-const http = require('http');
 const accountMock = require('./lib/account-mock.js');
 const apiURL = `hhtp://localhost:${process.env.PORT}`;
-const superagent = require('superagent');
 
 describe('AUTH router', () => {
   beforeAll(server.start)
   afterAll(server.stop)
   afterEach(accountMock.remove)
 
-  test('POST /signup with 200', () => {
-    return superagent.post(`${apiURL}/signup`)
-    .send({
-      userName: 'penssake',
-      email: 'penssake@test.com',
-      password: 'secret',
+  describe('POST /signup', () => {
+    test('POST /signup with 200', () => {
+      return superagent.post(`${apiURL}/signup`)
+      .send({
+        userName: 'penssake',
+        email: 'penssake@test.com',
+        password: 'secret',
+      })
+      .then(response => {
+        expect(response.status).toEqual(200);
+        expect(response.body.token).toBeTruthy();
+      })
     })
-    .then(response => {
-      expect(response.status).toEqual(200);
-      expect(response.body.token).toBeTruthy();
+    test('POST /signup with a 400', () => {
+      return superagent.post(`${apiURL}/signup`)
+      .send({
+        email: 'penssake@test.com',
+        password: 'secret',
+      })
+      .then(Promise.reject)
+      .catch(response => {
+        expect(response.status).toEqual(400)
+      })
     })
   })
 
-  test('POST /signup with 400 no userName provided', () => {
-    return superagent.post(`${apiURL}/signup`)
-    .send({
-      email: 'penssake@test.com',
-      password: 'secret',
+  describe('GET /login', () => {
+    test('GET /login 200', () => {
+      let tempMock;
+      accountMock.create()
+      .then(mock => {
+        tempMock = mock;
+        return superagent.get(`${apiURL}`)
+        .auth(mock.request.username, mock.request.password)
+      })
+      .then(response => {
+        expect(response.status).toEqual(200);
+        expect(response.body.token).toBeTruthy();
+      })
     })
-    .then(Promise.reject)
-    .catch(response => {
-      expect(response.status).toEqual(400);
-    });
-  });
-
-  test('POST /signup with 400 no email provided', () => {
-    return superagent.post(`${apiURL}/signup`)
-    .send({
-      userName: 'penssake',
-      password: 'secret',
+    test('GET /login 401 due to bad password', () => {
+      let tempMock
+      accountMock.create()
+      .then(mock => {
+        tempMock = mock;
+        return superagent.get(`${apiURL}/login`);
+        .auth(mock.request.username, 'hello world')
+      })
+      .then(Promise.reject)
+      .catch(response => {
+        expect(response.status).toEqual(401);
+      })
     })
-    .then(Promise.reject)
-    .catch(response => {
-      expect(response.status).toEqual(400);
-    });
-  });
 
-  test('POST /signup with 400 no password provided', () => {
-    return superagent.post(`${apiURL}/signup`)
-    .send({
-      userName: 'penssake',
-      password: 'secret',
+    test('GET /login 401 due to bad account', () => {
+      return superagent.get(`${apiURL}/login`)
+      .auth('bad_account_99', 'hello world')
+      .then(Promise.reject)
+      .catch(response => {
+        expect(response.status).toEqual(401)
+      })
     })
-    .then(Promise.reject)
-    .catch(response => {
-      expect(response.status).toEqual(400);
-    });
-
-
-});
-});
+  })
+})

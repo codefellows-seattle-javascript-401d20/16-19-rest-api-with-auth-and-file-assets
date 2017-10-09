@@ -1,8 +1,8 @@
 'use strict';
 
 const cors = require('cors');
-const express = require('express');
 const morgan = require('morgan');
+const express = require('express');
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 
@@ -14,6 +14,8 @@ app.use(cors({origin: process.env.CORS_ORIGIN}));
 app.use(morgan(production ? 'combined' : 'dev'));
 //register routes
 app.use(require('../route/auth-router.js'));
+app.use(require('../route/character-router.js'));
+app.use(require('../route/profile-router.js'));
 app.all('*', (request, response) => response.sendStatus(404));
 app.use(require('./error-middleware.js'));
 
@@ -33,11 +35,12 @@ module.exports = {
       return new Promise((resolve, reject) => {
         if(!server)
           return reject(new Error('__SERVER_OFF__server already off'));
-        server.close();
+        server.close() => {
           server = null;
           console.log('__SERVER_OFF__');
           return resolve();
         })
+      })
       .then(() => mongoose.disconnect());
   },
 };
