@@ -1,13 +1,14 @@
 'use strict';
 
-const Router = require('express');
+const {Router} = require('express');
 const jsonParser = require('body-parser').json();
 const Account = require('../model/account.js');
 const httpErrors = require('http-errors');
+const basicAuth = require('../lib/basic-auth-midleware.js');
 
-const authRouter = module.exports = new Router();
 
-authRouter.post('/signup', jsonParser, (request, response, next) => {
+module.exports = new Router()
+  .post('/signup', jsonParser, (request, response, next) => {
     if(!request.body.userName || !request.body.email || !request.body.password)
       return next(httpErrors(400, '__REQUEST_ERROR__ username, email, and password are required'));
 
@@ -16,6 +17,11 @@ authRouter.post('/signup', jsonParser, (request, response, next) => {
       .then(token => response.json({token}))
       .catch(next);
   })
-  authRouter.get('/login', () => {
 
-  })
+  .get('/login', basicAuth, (request, response, next) => {
+    if(!request.account)
+      return next(httpErrors(401, '__REQUEST_ERROR__account not found'));
+    request.account.tokenCreate()
+      .then(token => response({token}))
+      .catch(next);
+    });

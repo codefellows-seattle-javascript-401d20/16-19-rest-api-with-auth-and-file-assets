@@ -1,7 +1,7 @@
 'use strict';
 
-const Account = require('../../model/account.js');
 const faker = require('faker');
+const Account = require('../../model/account.js');
 
 const create = () => {
   let result = {

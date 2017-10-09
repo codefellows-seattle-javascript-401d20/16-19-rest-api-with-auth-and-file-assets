@@ -44,7 +44,7 @@ describe('AUTH router', () => {
       .then(mock => {
         tempMock = mock;
         return superagent.get(`${apiURL}`)
-        .auth(mock.request.username, mock.request.password)
+          .auth(mock.request.username, mock.request.password)
       })
       .then(response => {
         expect(response.status).toEqual(200);
@@ -56,8 +56,8 @@ describe('AUTH router', () => {
       accountMock.create()
       .then(mock => {
         tempMock = mock;
-        return superagent.get(`${apiURL}/login`);
-        .auth(mock.request.username, 'hello world')
+        return superagent.get(`${apiURL}/login`)
+          .auth(mock.request.username, 'hello world')
       })
       .then(Promise.reject)
       .catch(response => {
