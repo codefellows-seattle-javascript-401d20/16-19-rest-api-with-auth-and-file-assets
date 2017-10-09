@@ -8,15 +8,24 @@ const create = () => {
   let result = {};
   return accountMock.create()
     .then(accountMock => {
-      result.tempAccount = accountMock;
+      result.accountMock = accountMock;
       return new Image({
         account: accountMock.account._id,
-        title: faker.lorem.words(5),
+        title: faker.lorem.words(10),
         url: faker.image.image(),
-      });
+      }).save();
     })
-    .then();
+    .then(image => {
+      result.image = image;
+      return result;
+    });
 };
-const remove = () => { };
+
+const remove = () => {
+  return Promise.all([
+    accountMock.remove,
+    Image.remove({}),
+  ]);
+};
 
 module.exports = { create, remove };

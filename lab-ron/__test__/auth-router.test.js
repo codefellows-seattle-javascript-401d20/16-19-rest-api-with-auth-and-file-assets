@@ -38,9 +38,6 @@ describe('/profiles', () => {
           expect(res.status).toEqual(400);
         });
     });
-
-
-
   });
 
   describe('GET /login', () => {

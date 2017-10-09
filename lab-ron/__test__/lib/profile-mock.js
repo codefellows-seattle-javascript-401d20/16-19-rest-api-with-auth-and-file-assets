@@ -10,18 +10,27 @@ let create = () => {
     .then(tempAccount => {
       result.tempAccount = tempAccount;
       return new Profile({
-        username: { type: String, required: true, unique: true },
-        email: { type: String, required: true, unique: true },
-        account: { type: mongoose.Schema.Types.ObjectId, required: true, unique: true },
-        firstName: { type: String },
-        lastName: { type: String },
-        location: { type: String },
-        birthday: { type: Date },
-        avatar: { type: String },
-        bio: { type: String },
+        username: tempAccount.request.username,
+        email: tempAccount.request.email,
+        account: tempAccount.account._id,
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        location: faker.address.city(),
+        avatar: faker.random.image(),
+        bio: faker.lorem.words(100),
       }).save();
     })
-
-    
-    .then();
+    .then(profile => {
+      result.profile = profile;
+      return result;
+    });
 };
+
+let remove = () => {
+  return Promise.all([
+    accountMock.remove(),
+    Profile.remove({}),
+  ]);
+};
+
+module.exports = { create, remove };

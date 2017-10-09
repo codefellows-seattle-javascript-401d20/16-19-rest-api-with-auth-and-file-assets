@@ -15,7 +15,7 @@ module.exports = new Router()
     if (!req.account)
       return next(httpErrors(401, 'REQUEST ERROR: account not found'));
     if (!req.body.title || req.files.length > 1 || req.files[0].fieldname !== 'image')
-      return next(httpErrors(401, 'REQUEST ERROR: title or image not provided'));
+      return next(httpErrors(400, 'REQUEST ERROR: title or image not provided'));
 
     let file = req.files[0];
     console.log(file);
@@ -30,7 +30,20 @@ module.exports = new Router()
           url,
         }).save();
       })
-      .then(image => res.json(image))
+      .then(image => {
+        res.json(image);
+        res.sendStatus(418, 'I am a freaking teapot');
+      })
       .catch(next);
 
+
+  })
+  .get('/images/:id', bearerAuth, (req, res, next) => {
+    Image.findById(req.params.id)
+      .then(image => {
+        if (!image)
+          throw httpErrors(404, 'REQUEST ERROR: image not found');
+        res.json(image);
+      })
+      .catch(next);
   });
