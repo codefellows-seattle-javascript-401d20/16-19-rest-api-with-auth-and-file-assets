@@ -17,6 +17,7 @@ let create = () => {
       lastName: faker.name.lastName(),
       avatar: faker.random.image(),
       intro: faker.lorem.words(300),
+      account: result.tempaccount.account._id,
     }).save();
   })
   .then(profile => {

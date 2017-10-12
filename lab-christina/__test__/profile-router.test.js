@@ -29,6 +29,7 @@ describe('/profiles', () => {
         })
       })
       .then(response => {
+        console.log(response);
         expect(response.status).toEqual(200);
         expect(response.body.username).toEqual(tempAccount.request.username);
         expect(response.body.email).toEqual(tempAccount.request.email);

@@ -7,9 +7,9 @@ const mongoose = require('mongoose');
 const httpErrors = require('http-errors');
 
 const accountSchema = mongoose.Schema({
-  passwordHash: {type: String, required: true},
   username: {type: String, required: true, unique: true},
   email: {type: String, required: true, unique: true},
+  passwordHash: {type: String, required: true},
   tokenSeed: {type: String, required: true, unique: true},
   created: {type: Date, default: () => new Date()},
 });
@@ -23,26 +23,36 @@ accountSchema.methods.passwordVerify = function(password) {
     });
 };
 
-accountSchema.methods.createToken = function(){//why not arrow function
+accountSchema.methods.tokenCreate = function() {
   this.tokenSeed = crypto.randomBytes(64).toString('hex');
   return this.save()
     .then(account => {
-      return jwt.sign({tokenSeed: account.tokenSeed}, process.env.CHRISTINAS_SECRET, options);
+      let options = {expiresIn: '7d'};
+      return jwt.sign({tokenSeed: account.tokenSeed}, process.env.CHRISTY_SECRET, options);
+    });
+};
+
+accountSchema.methods.update = function(data) {
+  let {password} = data;
+  delete data.password;
+  return bcrypt.hash(password, 8)
+    .then(passwordHash => {
+      this.username = data.username;
+      this.email = data.email;
+      this.passwordHash = passwordHash;
+      return this.save();
     });
 };
 
 const Account = module.exports = mongoose.model('account', accountSchema);
 
-Account.create = function(data){
-  data = {...data}
-  //hash password
+Account.create = function(data) {
   let {password} = data;
   delete data.password;
-  return bcrypt.hash(password, 8)//not linier growing by multiples
+  return bcrypt.hash(password, 8)
     .then(passwordHash => {
       data.passwordHash = passwordHash;
-      data.toTokenSeed = crypto.randomBytes(64).toString('hex');
-      //create the account save the acocunt
+      data.tokenSeed = crypto.randomBytes(64).toString('hex');
       return new Account(data).save();
     });
 };

@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "8.4.0"
+  },
   "name": "lab-christina",
   "version": "1.0.0",
   "description": "",
@@ -16,6 +19,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "eslint": "^4.8.0",
     "faker": "^4.1.0",
     "jest": "^21.2.1",

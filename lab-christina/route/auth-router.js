@@ -4,7 +4,7 @@ const {Router} = require('express');
 const jsonParser = require('body-parser').json();
 const Account = require('../model/account.js');
 const httpErrors = require('http-errors');
-const basicAuth = require('../lib/basic-auth-midleware.js');
+const basicAuth = require('../lib/basic-auth-middleware.js');
 
 
 module.exports = new Router()

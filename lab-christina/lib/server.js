@@ -4,18 +4,24 @@ const cors = require('cors');
 const morgan = require('morgan');
 const express = require('express');
 const mongoose = require('mongoose');
+const jsonParser = require('body-parser').json();
+const authRouter = require('../route/auth-router.js');
+// const characterRouter = require('../route/character-router.js');
+const profileRouter = require('../route/profile-router.js');
 mongoose.Promise = Promise;
 
 const app = express();
 let server = null;
 const production = process.env.NODE_ENV === 'production';
-//global middleware
+
+app.use(jsonParser);
 app.use(cors({origin: process.env.CORS_ORIGIN}));
 app.use(morgan(production ? 'combined' : 'dev'));
-//register routes
-app.use(require('../route/auth-router.js'));
-// app.use(require('../route/character-router.js'));
-app.use(require('../route/profile-router.js'));
+
+app.use(authRouter);
+// app.use(characterRouter);
+app.use(profileRouter);
+
 app.all('*', (request, response) => response.sendStatus(404));
 app.use(require('./error-middleware.js'));
 

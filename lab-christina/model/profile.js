@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 
-const profleSchema = mongoose.Schema({
+const profileSchema = mongoose.Schema({
   username: {type: String, required: true, unique: true},
   email: {type:String, required: true, unique: true},
   bio: {type: String},
