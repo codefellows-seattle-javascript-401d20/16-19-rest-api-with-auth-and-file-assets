@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = (error, request, response, next) => {
-  console.error(error);
 
   if(error.status)
     return response.sendStatus(error.status);
@@ -19,7 +18,7 @@ module.exports = (error, request, response, next) => {
 
   if(message.includes('unauthorized'))
     return response.sendStatus(401);
-    
+
   response.sendStatus(500);
 
 };

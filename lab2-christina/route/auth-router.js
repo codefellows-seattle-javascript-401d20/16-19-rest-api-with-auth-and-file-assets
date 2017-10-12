@@ -14,7 +14,9 @@ module.exports = new Router()
 
     Account.create(request.body)
       .then(user => user.tokenCreate())
-      .then(token => response.json({token}))
+      .then(token => {
+        response.json({token})
+      })
       .catch(next);
   })
 
@@ -22,6 +24,8 @@ module.exports = new Router()
     if(!request.account)
       return next(httpErrors(401, '__REQUEST_ERROR__account not found'));
     request.account.tokenCreate()
-      .then(token => response({token}))
-      .catch(next);
+      .then(token => {
+        response({token})
+    })
+    .catch(next);
     });

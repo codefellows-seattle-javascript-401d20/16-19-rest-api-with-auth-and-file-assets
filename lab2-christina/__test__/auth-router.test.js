@@ -4,7 +4,7 @@ require('./lib/setup.js');
 const superagent = require('superagent');
 const server = require('../lib/server.js');
 const accountMock = require('./lib/account-mock.js');
-const apiURL = `hhtp://localhost:${process.env.PORT}`;
+const apiURL = `http://localhost:${process.env.PORT}`;
 
 describe('AUTH router', () => {
   beforeAll(server.start)
@@ -12,7 +12,7 @@ describe('AUTH router', () => {
   afterEach(accountMock.remove)
 
   describe('POST /signup', () => {
-    test('POST /signup with 200', () => {
+    test.only('POST /signup with 200', () => {
       return superagent.post(`${apiURL}/signup`)
       .send({
         userName: 'penssake',
@@ -20,6 +20,7 @@ describe('AUTH router', () => {
         password: 'secret',
       })
       .then(response => {
+        console.log(response);
         expect(response.status).toEqual(200);
         expect(response.body.token).toBeTruthy();
       })

@@ -6,8 +6,8 @@ const jsonParser = require('body-parser').json();
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
 const Profile = require('../model/profile.js');
 
-let profileRouter = () => new Router()
-  profileRouter.post('/profiles', bearerAuth, (request, response, next) => {
+module.exports = new Router()
+ .post('/profiles', bearerAuth, (request, response, next) => {
    return new Profile({
      ...request.body,
      account: request.account._id,
@@ -19,7 +19,7 @@ let profileRouter = () => new Router()
      })
      .catch(next);
  })
- profileRouter.get('/profiles/:id', bearerAuth, (request, response, next) => {
+.get('/profiles/:id', bearerAuth, (request, response, next) => {
   Profile.findById(request.params.id)
     .then(profile => {
       if(!profile)
