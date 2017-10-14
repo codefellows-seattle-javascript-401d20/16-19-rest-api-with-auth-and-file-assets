@@ -55,32 +55,91 @@ describe('/profiles', () => {
   });
 
   describe('GET /profiles', () => {
-    test.only('200 get profile', () => {
+    test('200 get profile', () => {
       return profileMock.createMany(20)
         .then(() => {
           return superagent.get(`${apiURL}/profiles`);
         })
         .then(res => {
-          console.log(res.body);
+          // console.log(res.body);
+          expect(res.status).toEqual(200);
+          expect(res.body.count).toEqual(20);
+        });
+    });
+
+    test('200 page should be NaN', () => {
+      return profileMock.create()
+        .then(() => {
+          return superagent.get(`${apiURL}/profiles?page=wedrfgh`);
+        })
+        .then(res => {
           expect(res.status).toEqual(200);
         });
     });
 
-    // test('200 get profile', () => {
-    //   let tempAccount;
-    //   return accountMock.create()
-    //     .then(mock => {
-    //       tempAccount = mock;
-    //       console.log(tempAccount.token);
-    //       return superagent.get(`${apiURL}/profiles`)
-    //         .set('Authorization', `Bearer ${tempAccount.token}`);
-    //     })
-    //     .then(res => {
-    //       expect(res.status).toEqual(200);
-    //     });
-    // });
+    test('200 page should be less than zero', () => {
+      return profileMock.create()
+        .then(() => {
+          return superagent.get(`${apiURL}/profiles?page=-1`);
+        })
+        .then(res => {
+          expect(res.status).toEqual(200);
+        });
+    });
+
+    test('200 page should be less than zero', () => {
+
+      return profileMock.create()
+        .then(() => {
+          return superagent.get(`${apiURL}/profiles?page=1`);
+
+        })
+        .then(res => {
+          expect(res.status).toEqual(200);
+        });
+
+    });
+
+    test('GET /profiles? 200 fuzzies', () => {
+      return accountMock.create()
+        .then(() => {
+          return profileMock.createMany(100)
+            .then(() => {
+              return superagent.get(`${apiURL}/profiles?firstName=a&lastName=a`);
+            })
+            .then(res => {
+              expect(res.status).toEqual(200);
+            });
+        });
+    });
+
+    test('GET /profiles/:id 200', () => {
+      let tempMock;
+      return profileMock.create()
+        .then(mock => {
+          tempMock = mock;
+          return superagent.get(`${apiURL}/profiles/${mock.profile._id}`);
+        })
+        .then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body.lastName).toEqual(tempMock.profile.lastName);
+          expect(res.body._id).toEqual(tempMock.profile._id.toString());
+          expect(res.body.firstName).toEqual(tempMock.profile.firstName);
+          expect(res.body.account).toEqual(tempMock.tempAccount.account._id.toString());
+        });
+    });
+
+    test('GET /profiles/:id 404', () => {
+      return profileMock.create()
+        .then(() => {
+          return superagent.get(`${apiURL}/profiles/badjoojoo`);
+        })
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(404);
+        });
+    });
   });
 });
-
 
 

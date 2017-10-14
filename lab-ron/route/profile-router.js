@@ -20,6 +20,14 @@ module.exports = new Router()
       .catch(next);
   })
 
+  .get('/profiles/:id', (req, res, next) => {
+    Profile.findById(req.params.id)
+      .then(profile => {
+        res.json(profile);
+      })
+      .catch(next);
+  })
+
   .get('/profiles', (req, res, next) => {
     let { page = '0' } = req.query;
     delete req.query.page;
