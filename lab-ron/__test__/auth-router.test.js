@@ -14,7 +14,6 @@ describe('/profiles', () => {
   afterEach(accountMock.remove);
 
   describe('POST /signup', () => {
-
     test('POST /signup returning 200 OK', () => {
       return superagent.post(`${apiURL}/signup`)
         .send({
@@ -27,6 +26,7 @@ describe('/profiles', () => {
           expect(res.body.token).toBeTruthy();
         });
     });
+
     test('POST /signup with 400', () => {
       return superagent.post(`${apiURL}/signup`)
         .send({
@@ -40,10 +40,12 @@ describe('/profiles', () => {
     });
   });
 
+
+
+
   describe('GET /login', () => {
     test('GET /login 200', () => {
-
-      accountMock.create()
+      return accountMock.create()
         .then(mock => {
           return superagent.get(`${apiURL}/login`)
             .auth(mock.request.username, mock.request.password);
@@ -55,7 +57,7 @@ describe('/profiles', () => {
     });
 
     test('GET /login 401 bad password', () => {
-      accountMock.create()
+      return accountMock.create()
         .then(mock => {
           return superagent.get(`${apiURL}/login`)
             .auth(mock.request.username, 'fakePass');
@@ -72,6 +74,14 @@ describe('/profiles', () => {
         .then(Promise.reject)
         .catch(res => {
           expect(res.status).toEqual(401);
+        });
+    });
+
+    test('GET /login 40 bad request', () => {
+      return superagent.get(`${apiURL}/login`)
+        .then(Promise.reject)
+        .catch(res => {
+          expect(res.status).toEqual(400);
         });
     });
   });

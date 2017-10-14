@@ -19,9 +19,8 @@ module.exports = new Router()
       })
       .catch(next);
   })
+
   .get('/login', basicAuth, (req, res, next) => {
-    if (!req.account)
-      return next(httpErrors(401, 'REQUEST ERROR: account not found'));
     req.account.tokenCreate()
       .then(token => {
         res.cookie('Imagr-Token', token, { maxAge: 604800000 });
