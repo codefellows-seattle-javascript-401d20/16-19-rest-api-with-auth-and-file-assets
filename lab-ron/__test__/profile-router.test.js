@@ -52,7 +52,33 @@ describe('/profiles', () => {
           expect(res.status).toEqual(401);
         });
     });
-    
+  });
+
+  describe('GET /profiles', () => {
+    test.only('200 get profile', () => {
+      return profileMock.createMany(20)
+        .then(() => {
+          return superagent.get(`${apiURL}/profiles`);
+        })
+        .then(res => {
+          console.log(res.body);
+          expect(res.status).toEqual(200);
+        });
+    });
+
+    // test('200 get profile', () => {
+    //   let tempAccount;
+    //   return accountMock.create()
+    //     .then(mock => {
+    //       tempAccount = mock;
+    //       console.log(tempAccount.token);
+    //       return superagent.get(`${apiURL}/profiles`)
+    //         .set('Authorization', `Bearer ${tempAccount.token}`);
+    //     })
+    //     .then(res => {
+    //       expect(res.status).toEqual(200);
+    //     });
+    // });
   });
 });
 

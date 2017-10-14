@@ -26,6 +26,11 @@ let create = () => {
     });
 };
 
+
+let createMany = (num) => {
+  return Promise.all(new Array(num).fill(0).map(() => create()));
+};
+
 let remove = () => {
   return Promise.all([
     accountMock.remove(),
@@ -33,4 +38,4 @@ let remove = () => {
   ]);
 };
 
-module.exports = { create, remove };
+module.exports = { create, createMany, remove };
