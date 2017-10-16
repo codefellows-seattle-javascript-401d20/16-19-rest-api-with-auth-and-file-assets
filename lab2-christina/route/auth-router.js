@@ -13,7 +13,7 @@ module.exports = new Router()
       return next(httpErrors(400, '__REQUEST_ERROR__ username, email, and password are required'));
 
     Account.create(request.body)
-      .then(user => user.tokenCreate())
+      .then(account => account.tokenCreate())
       .then(token => {
         response.json({token})
       })
