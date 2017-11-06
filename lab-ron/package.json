@@ -8,6 +8,7 @@
     "start": "node index.js",
     "watch": "nodemon index.js",
     "test-watch": "jest --watch -i --coverage",
+    "test-watch-lite": "jest --watch -i",
     "test": "jest -i --coverage",
     "dbon": "mkdir -p ./db && mongod --dbpath ./db",
     "dboff": "killall mongod"
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.127.0",
+    "aws-sdk-mock": "^1.7.0",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",

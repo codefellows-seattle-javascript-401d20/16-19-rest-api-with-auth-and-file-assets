@@ -100,7 +100,7 @@ describe('/profiles', () => {
 
     });
 
-    test('GET /profiles? 200 fuzzies', () => {
+    test('200 should return profiles based on fuzzy search', () => {
       return accountMock.create()
         .then(() => {
           return profileMock.createMany(100)
@@ -112,8 +112,10 @@ describe('/profiles', () => {
             });
         });
     });
+  });
+  describe('GET /profiles:/id', () => {
 
-    test('GET /profiles/:id 200', () => {
+    test('200 should return a single profile', () => {
       let tempMock;
       return profileMock.create()
         .then(mock => {
@@ -129,7 +131,7 @@ describe('/profiles', () => {
         });
     });
 
-    test('GET /profiles/:id 404', () => {
+    test('404 should return not found', () => {
       return profileMock.create()
         .then(() => {
           return superagent.get(`${apiURL}/profiles/badjoojoo`);
