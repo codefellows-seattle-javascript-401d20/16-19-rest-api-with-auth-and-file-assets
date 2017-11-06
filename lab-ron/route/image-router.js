@@ -7,14 +7,10 @@ const httpErrors = require('http-errors');
 const Image = require('../model/image.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
 
-
 const upload = multer({ dest: `${__dirname}/../temp` });
 
 module.exports = new Router()
   .post('/images', bearerAuth, upload.any(), (req, res, next) => {
-
-    if (!req.account)
-      return next(httpErrors(401, 'REQUEST_ERROR: no account found'));
     if (!req.body.title || req.files.length > 1 || req.files[0].fieldname !== 'image')
       return next(httpErrors(400, 'REQUEST_ERROR: title or image was not provided'));
 
@@ -31,22 +27,23 @@ module.exports = new Router()
           url,
         }).save();
       })
+      .then(image => res.json(image))
+      .catch(next);
+  })
+
+  .get('/images/:id', (req, res, next) => {
+    Image.findById(req.params.id)
       .then(image => {
         res.json(image);
       })
       .catch(next);
-
-
-
-
-
   })
-  .get('/images/:id', bearerAuth, (req, res, next) => {
-    Image.findById(req.params.id)
-      .then(image => {
-        if (!image)
-          throw httpErrors(404, 'REQUEST ERROR: image not found');
-        res.json(image);
+
+  .delete('/images/:id', bearerAuth, (req, res, next) => {
+    Image.findByIdAndRemove(req.params.id)
+      .then(() => {
+        res.sendStatus(204);
       })
       .catch(next);
   });
+

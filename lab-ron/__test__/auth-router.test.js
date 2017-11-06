@@ -40,9 +40,6 @@ describe('/profiles', () => {
     });
   });
 
-
-
-
   describe('GET /login', () => {
     test('GET /login 200', () => {
       return accountMock.create()
