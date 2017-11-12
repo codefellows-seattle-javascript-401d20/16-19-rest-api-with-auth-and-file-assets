@@ -62,7 +62,7 @@ describe('/images', () => {
         });
     });
 
-    test('400 Bad Request ', () => {
+    test('400 Bad Request - NO bearer header provided ', () => {
       return accountMock.create()
         .then(() => {
           return superagent.post(`${apiURL}/images`)
