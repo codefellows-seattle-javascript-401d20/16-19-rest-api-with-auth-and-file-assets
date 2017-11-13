@@ -13,11 +13,11 @@
 * [mongoosse guide](http://mongoosejs.com/docs/guide.html)
 * [mongoosse api docs](http://mongoosejs.com/docs/api.html)
 
-## Configuration 
-Configure the root of your repository with the following files and directories. Thoughfully name and organize any aditional configuration or module files.
+## Configuration
+Configure the root of your repository with the following files and directories. Thoughtfully name and organize any additional configuration or module files.
 * **README.md** - contains documentation
 * **.env** - contains env variables **(should be git ignored)**
-* **.gitignore** - contains a [robust](http://gitignore.io) `.gitignore` file 
+* **.gitignore** - contains a [robust](http://gitignore.io) `.gitignore` file
 * **.eslintrc** - contains the course linter configuratoin
 * **.eslintignore** - contains the course linter ignore configuration
 * **package.json** - contains npm package config
@@ -35,10 +35,10 @@ Configure the root of your repository with the following files and directories. 
 For this assignment you will be building a RESTful HTTP server with basic authentication useing express.
 
 #### Account
-Create a user `Account` model that keeps track of a username, email, hashed password, and token seed. The model should be able to regenorate tokens using json web token. 
+Create a user `Account` model that keeps track of a username, email, hashed password, and token seed. The model should be able to regenorate tokens using json web token.
 
 #### Server Endpoints
-* `POST /signup` 
+* `POST /signup `
   * pass data as stringifed JSON in the body of a **POST** request to create a new account
   * on success respond with a 200 status code and an authentication token
   * on failure due to a bad request send a 400 status code
