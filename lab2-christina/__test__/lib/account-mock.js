@@ -2,9 +2,8 @@
 
 const faker = require('faker');
 const Account = require('../../model/account.js');
-const accountMock = module.exports = {};
 
-accountMock.create = () => {
+let create = () => {
   let result = {
     request: {
       username: faker.internet.userName(),
@@ -13,7 +12,7 @@ accountMock.create = () => {
     },
   };
 
-return Account.create(result.request)
+  return Account.create(result.request)
     .then(account => {
       result.account = account;
       return account.tokenCreate();
@@ -29,4 +28,6 @@ return Account.create(result.request)
     });
 };
 
-accountMock.remove = () => Account.remove({});
+const remove = () => Account.remove({});
+
+module.exports = { create, remove };

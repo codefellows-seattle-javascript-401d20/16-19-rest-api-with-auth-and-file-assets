@@ -20,28 +20,28 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">18.75% </span>
+        <span class="strong">66.67% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>3/16</span>
+        <span class='fraction'>12/18</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">60% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/6</span>
+        <span class='fraction'>6/10</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">66.67% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/3</span>
+        <span class='fraction'>2/3</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">18.75% </span>
+        <span class="strong">66.67% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>3/16</span>
+        <span class='fraction'>12/18</span>
       </div>
     </div>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -70,25 +70,29 @@
 25
 26
 27
-28</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+28
+29
+30</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -102,20 +106,22 @@
 const httpErrors = require('http-errors');
 const Account = require('../model/account.js');
 &nbsp;
-module.exports = <span class="fstat-no" title="function not covered" >(r</span>equest, response, next) =&gt; {
-<span class="cstat-no" title="statement not covered" >  if(!request.headers.authorization)</span>
+module.exports = (request, response, next) =&gt; {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(!request.headers.authorization)
 <span class="cstat-no" title="statement not covered" >    return next(httpErrors(400, '__REQUEST_ERROR__ authorization header required'));</span>
 &nbsp;
-  const encoded = <span class="cstat-no" title="statement not covered" >request.headers.authorization.split('Basic ')[1];</span>
-<span class="cstat-no" title="statement not covered" >  if(!encoded)</span>
+  const encoded = request.headers.authorization.split('Basic ')[1];
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(!encoded)
 <span class="cstat-no" title="statement not covered" >    return next(httpErrors(400, '__REQUEST_ERROR__ Basic auth required'));</span>
-  let decoded = <span class="cstat-no" title="statement not covered" >new Buffer(encoded, 'base64').toString();</span>
-  let [username, password] = <span class="cstat-no" title="statement not covered" >decoded.split(':');</span>
+  let decoded = new Buffer(encoded, 'base64').toString();
+  let [username, password] = decoded.split(':');
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(!username || !password)
+<span class="cstat-no" title="statement not covered" >    return next(httpErrors(400, '__REQUEST_ERROR__username and password required'));</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  Account.findOne({username})</span>
-    .then(<span class="fstat-no" title="function not covered" >ac</span>count =&gt; {
-<span class="cstat-no" title="statement not covered" >      if(!account)</span>
-<span class="cstat-no" title="statement not covered" >        throw httpErrors(404, '__REQUEST_ERROR__ account does not exist');</span>
+  Account.findOne({username})
+    .then(account =&gt; {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if(!account)
+        throw httpErrors(401, '__REQUEST_ERROR__ account does not exist');
 <span class="cstat-no" title="statement not covered" >      return account.passwordVerify(password);</span>
     })
     .then(<span class="fstat-no" title="function not covered" >ac</span>count =&gt; {
@@ -130,7 +136,7 @@ module.exports = <span class="fstat-no" title="function not covered" >(r</span>e
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Oct 16 2017 08:45:14 GMT-0700 (PDT)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Nov 13 2017 05:53:50 GMT-0800 (PST)
 </div>
 </div>
 <script src="../prettify.js"></script>

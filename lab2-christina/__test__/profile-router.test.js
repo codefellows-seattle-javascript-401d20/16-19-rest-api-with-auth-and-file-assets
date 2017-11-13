@@ -15,41 +15,54 @@ describe('/profiles', () => {
 
   describe('POST /profiles', () => {
     test('200 Profile returned', () => {
-      let tempAccount
+      let tempAccount;
       return accountMock.create()
-      .then(mock => {
-        tempAccount = mock;
-        return superagent.post(`${apiURL}/profiles`)
-        .set('Authorization', `Bearer ${tempAccount.token}`)
-        .send({
-          firstName: 'John',
-          lastName: 'Jacobs',
+        .then(mock => {
+          tempAccount = mock;
+          return superagent.post(`${apiURL}/profiles`)
+            .set('Authorization', `Bearer ${tempAccount.token}`)
+            .send({
+              firstName: 'John',
+              lastName: 'Jacobs',
+            });
         })
-      })
-      .then(response => {
-        expect(response.status).toEqual(200);
-        expect(response.body.username).toEqual(tempAccount.request.username);
-        expect(response.body.email).toEqual(tempAccount.request.email);
-        expect(response.body.firstName).toEqual('John');
-        expect(response.body.lastName).toEqual('Jacobs');
-      });
+        .then(response => {
+          expect(response.status).toEqual(200);
+          expect(response.body.username).toEqual(tempAccount.request.username);
+          expect(response.body.email).toEqual(tempAccount.request.email);
+          expect(response.body.firstName).toEqual('John');
+          expect(response.body.lastName).toEqual('Jacobs');
+        });
     });
 
     test('400 should return __BAD REQUEST__', () => {
       let tempAccount;
       return accountMock.create()
-      .then(mock => {
-        tempAccount = mock;
-        return superagent.post(`${apiURL}/profiles`)
-        .set('Authorization', `Bearer ${tempAccount.token}`)
-        .send({
-          firstName: 'Jane',
+        .then(mock => {
+          tempAccount = mock;
+          return superagent.post(`${apiURL}/profiles`)
+            .set('Authorization', `Bearer ${tempAccount.token}`)
+            .send({
+              firstName: 'Jane',
+            });
         })
-      })
-      .then(Promise.reject)
-      .catch(response => {
-        expect(response.status).toEqual(400)
-      })
-    })
+        .then(Promise.reject)
+        .catch(response => {
+          expect(response.status).toEqual(400);
+        });
+    });
+
+    test('401 should return nothing', () => {
+      return superagent.post(`${apiURL}/profiles`)
+        .set('Authorization', 'funky token')
+        .send({
+          firstName: 'John',
+          lastName: 'Jacobs',
+        })
+        .then(Promise.reject)
+        .catch(response => {
+          expect(response.status).toEqual(401);
+        });
+    });
   });
 });

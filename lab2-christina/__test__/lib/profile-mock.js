@@ -19,12 +19,12 @@ profileMock.create = () => {
         lastName: faker.name.lastName(),
         avatar: faker.random.image(),
         intro: faker.lorem.words(300),
-    }).save();
-  })
-  .then(profile => {
-    result.profile = profile;
-    return result;
-  });
+      }).save();
+    })
+    .then(profile => {
+      result.profile = profile;
+      return result;
+    });
 };
 
 profileMock.remove = () => {
@@ -32,4 +32,4 @@ profileMock.remove = () => {
     accountMock.remove,
     Profile.remove({}),
   ]);
-}
+};

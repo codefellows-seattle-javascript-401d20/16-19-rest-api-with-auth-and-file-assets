@@ -12,11 +12,13 @@ module.exports = (request, response, next) => {
     return next(httpErrors(400, '__REQUEST_ERROR__ Basic auth required'));
   let decoded = new Buffer(encoded, 'base64').toString();
   let [username, password] = decoded.split(':');
+  if(!username || !password)
+    return next(httpErrors(400, '__REQUEST_ERROR__username and password required'));
 
   Account.findOne({username})
     .then(account => {
       if(!account)
-        throw httpErrors(404, '__REQUEST_ERROR__ account does not exist');
+        throw httpErrors(401, '__REQUEST_ERROR__ account does not exist');
       return account.passwordVerify(password);
     })
     .then(account => {

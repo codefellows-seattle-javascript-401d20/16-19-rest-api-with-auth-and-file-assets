@@ -7,11 +7,11 @@ const Account = require('../model/account.js');
 const promisify = (fn) => (...args) => {
   return new Promise((resolve, reject) => {
     fn(...args, (err, data) => {
-      if(err) return reject(err)
-      resolve(data)
-    })
-  })
-}
+      if(err) return reject(err);
+      resolve(data);
+    });
+  });
+};
 
 module.exports = (request, response, next) => {
   if(!request.headers.authorization)

@@ -11,6 +11,7 @@ const profileSchema = mongoose.Schema({
   avatar: {type: String},
   birthday: {type: Date},
   location: {type: String},
+  account: { type: mongoose.Schema.Types.ObjectId, required: true },
 });
 
 module.exports = mongoose.model('profile', profileSchema);
